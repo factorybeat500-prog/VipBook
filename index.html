@@ -457,11 +457,14 @@
             font-size: 2rem;
         }
         
+        .features-section {
+            margin-bottom: 50px;
+        }
+        
         .features {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
-            margin-bottom: 50px;
             animation: fadeInUp 2.4s ease-out;
         }
         
@@ -649,9 +652,9 @@
         <section class="video-section">
             <h2 class="section-title">Nuestro Último Video</h2>
             <div class="video-container">
-                <!-- Video con atributos para reproducción automática -->
+                <!-- Video con volumen activo -->
                 <video id="mainVideo" poster="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" 
-                       autoplay muted playsinline>
+                       playsinline>
                     <source src="https://www.dropbox.com/scl/fi/kefvcotm5qml2oqqj0cyu/1230-02_1767135165303.mp4?rlkey=t0ozj8ggj6svmhu4gm6k81j2h&st=l2xfnww5&raw=1" type="video/mp4">
                     Tu navegador no soporta el elemento de video.
                 </video>
@@ -668,12 +671,12 @@
             
             <div class="video-controls">
                 <button class="control-btn" id="playPauseBtn">
-                    <i class="fas fa-pause"></i> <span>Pausar</span>
+                    <i class="fas fa-play"></i> <span>Reproducir</span>
                 </button>
                 <button class="control-btn" id="muteBtn">
                     <i class="fas fa-volume-up"></i> <span>Silenciar</span>
                 </button>
-                <input type="range" min="0" max="1" step="0.1" value="1" class="volume-slider" id="volumeSlider">
+                <input type="range" min="0" max="1" step="0.1" value="0.5" class="volume-slider" id="volumeSlider">
                 <button class="control-btn" id="fullscreenBtn">
                     <i class="fas fa-expand"></i> <span>Pantalla completa</span>
                 </button>
@@ -822,53 +825,49 @@
             createMusicNotes();
             createAudioVisualizer();
             
-            // Configurar el video para que se reproduzca automáticamente
-            video.muted = true; // Necesario para autoplay en muchos navegadores
-            video.play().then(() => {
-                console.log("Video reproduciéndose automáticamente");
-                videoOverlay.classList.remove('visible');
-                updatePlayPauseButton();
-            }).catch(error => {
-                console.log("Autoplay bloqueado: ", error);
-                videoOverlay.classList.add('visible');
-                video.muted = false;
-                updateMuteButton();
-            });
+            // Configurar el video con volumen activo
+            video.volume = 0.5; // Volumen al 50% por defecto
+            volumeSlider.value = 0.5;
             
-            // Configurar el control de volumen
-            video.volume = volumeSlider.value;
+            // Intentar reproducción automática con sonido
+            const playPromise = video.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    console.log("Video reproduciéndose automáticamente con sonido");
+                    videoOverlay.classList.remove('visible');
+                    updatePlayPauseButton();
+                }).catch(error => {
+                    console.log("Autoplay bloqueado: ", error);
+                    videoOverlay.classList.add('visible');
+                    updatePlayPauseButton();
+                });
+            }
+            
+            // Configurar eventos del video
+            video.addEventListener('play', updatePlayPauseButton);
+            video.addEventListener('pause', updatePlayPauseButton);
+            video.addEventListener('volumechange', updateMuteButton);
         });
         
         // Reproducir/pausar video desde el botón de superposición
         playButton.addEventListener('click', () => {
-            video.play().then(() => {
-                videoOverlay.classList.remove('visible');
+            if (video.paused || video.ended) {
+                video.play().then(() => {
+                    videoOverlay.classList.remove('visible');
+                    updatePlayPauseButton();
+                });
+            } else {
+                video.pause();
                 updatePlayPauseButton();
-                // Desactivar mute al hacer clic manualmente
-                if (video.muted) {
-                    video.muted = false;
-                    updateMuteButton();
-                }
-            });
+            }
         });
         
         // Mostrar superposición cuando el video termina
         video.addEventListener('ended', () => {
             videoOverlay.classList.add('visible');
             playButton.querySelector('i').className = 'fas fa-redo';
-        });
-        
-        // Ocultar superposición cuando el video se está reproduciendo
-        video.addEventListener('play', () => {
-            videoOverlay.classList.remove('visible');
-            playButton.querySelector('i').className = 'fas fa-play';
-        });
-        
-        // Mostrar superposición cuando el video está en pausa
-        video.addEventListener('pause', () => {
-            if (!video.ended) {
-                videoOverlay.classList.add('visible');
-            }
+            updatePlayPauseButton();
         });
         
         // Control de reproducción/pausa
@@ -888,13 +887,16 @@
         function updatePlayPauseButton() {
             const icon = playPauseBtn.querySelector('i');
             const text = playPauseBtn.querySelector('span');
+            const overlayIcon = playButton.querySelector('i');
             
             if (video.paused || video.ended) {
                 icon.className = 'fas fa-play';
                 text.textContent = 'Reproducir';
+                overlayIcon.className = 'fas fa-play';
             } else {
                 icon.className = 'fas fa-pause';
                 text.textContent = 'Pausar';
+                overlayIcon.className = 'fas fa-pause';
             }
         }
         
@@ -923,11 +925,9 @@
             if (video.muted || video.volume === 0) {
                 icon.className = 'fas fa-volume-mute';
                 text.textContent = 'Activar sonido';
-                volumeSlider.value = 0;
             } else {
                 icon.className = 'fas fa-volume-up';
                 text.textContent = 'Silenciar';
-                volumeSlider.value = video.volume;
             }
         }
         
@@ -954,10 +954,28 @@
             }
         });
         
-        // Actualizar controles cuando cambia el estado del video
-        video.addEventListener('play', updatePlayPauseButton);
-        video.addEventListener('pause', updatePlayPauseButton);
-        video.addEventListener('volumechange', updateMuteButton);
+        // Manejar cambio de pantalla completa
+        document.addEventListener('fullscreenchange', () => {
+            const fullscreenIcon = fullscreenBtn.querySelector('i');
+            if (document.fullscreenElement) {
+                fullscreenIcon.className = 'fas fa-compress';
+            } else {
+                fullscreenIcon.className = 'fas fa-expand';
+            }
+        });
+        
+        // Manejar clics en el video para pausar/reproducir
+        video.addEventListener('click', () => {
+            if (video.paused || video.ended) {
+                video.play().then(() => {
+                    videoOverlay.classList.remove('visible');
+                    updatePlayPauseButton();
+                });
+            } else {
+                video.pause();
+                updatePlayPauseButton();
+            }
+        });
     </script>
 </body>
 </html>
