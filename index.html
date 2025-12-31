@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reproductor Musical Sencillo</title>
+    <title>Kerim Music - Únete a nuestra comunidad</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -14,587 +14,950 @@
         }
         
         body {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background-color: #0a0a0a;
             color: #fff;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 500px;
-            background-color: rgba(25, 25, 40, 0.9);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-        }
-        
-        header {
-            background-color: #0f3460;
-            padding: 20px;
-            text-align: center;
-            border-bottom: 2px solid #e94560;
-        }
-        
-        h1 {
-            font-size: 1.8rem;
-            color: #fff;
-        }
-        
-        h1 i {
-            color: #e94560;
-            margin-right: 10px;
-        }
-        
-        .player {
-            padding: 25px;
-        }
-        
-        .song-info {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-        
-        .album-art {
-            width: 200px;
-            height: 200px;
-            margin: 0 auto 20px;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            border: 3px solid #0f3460;
-        }
-        
-        .album-art img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .song-title {
-            font-size: 1.4rem;
-            margin-bottom: 5px;
-            color: #fff;
-        }
-        
-        .artist {
-            font-size: 1rem;
-            color: #a0a0c0;
-            margin-bottom: 10px;
-        }
-        
-        .progress-area {
-            margin-bottom: 25px;
-        }
-        
-        .progress-bar {
-            height: 6px;
-            width: 100%;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            margin-bottom: 10px;
-            cursor: pointer;
-        }
-        
-        .progress {
-            height: 100%;
-            width: 0%;
-            background-color: #e94560;
-            border-radius: 10px;
+            line-height: 1.6;
+            overflow-x: hidden;
             position: relative;
         }
         
-        .progress::after {
-            content: '';
-            position: absolute;
-            height: 12px;
-            width: 12px;
-            border-radius: 50%;
-            background-color: #e94560;
-            right: -5px;
-            top: 50%;
-            transform: translateY(-50%);
-            opacity: 0;
-            transition: opacity 0.2s;
+        /* Fondo animado con partículas */
+        #particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
         }
         
-        .progress-bar:hover .progress::after {
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px);
+                opacity: 0;
+            }
+        }
+        
+        /* Notas musicales flotantes */
+        .music-note {
+            position: fixed;
+            font-size: 24px;
+            opacity: 0.7;
+            z-index: -1;
+            animation: floatNote 20s infinite linear;
+        }
+        
+        @keyframes floatNote {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0 20px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 1.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .logo {
+            font-size: 4.5rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            position: relative;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7),
+                         0 0 20px rgba(255, 255, 255, 0.5),
+                         0 0 30px rgba(255, 255, 255, 0.3);
+            animation: pulse 2s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0% {
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0.7),
+                             0 0 20px rgba(255, 255, 255, 0.5),
+                             0 0 30px rgba(255, 255, 255, 0.3);
+            }
+            100% {
+                text-shadow: 0 0 15px rgba(255, 255, 255, 0.9),
+                             0 0 30px rgba(255, 255, 255, 0.7),
+                             0 0 45px rgba(255, 255, 255, 0.5);
+            }
+        }
+        
+        .logo span {
+            color: #fff;
+            background: linear-gradient(90deg, #ff00cc, #3333ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            padding: 0 10px;
+        }
+        
+        .tagline {
+            font-size: 1.4rem;
+            color: #aaa;
+            margin-bottom: 20px;
+            animation: slideIn 1.8s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .video-section {
+            background-color: rgba(17, 17, 17, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 2s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .video-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            animation: shine 5s infinite;
+        }
+        
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .section-title {
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            text-align: center;
+            color: #fff;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #fff, transparent);
+            bottom: -10px;
+            left: 0;
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.8);
+            transform: perspective(1000px) rotateX(5deg);
+            transition: transform 0.5s;
+        }
+        
+        .video-container:hover {
+            transform: perspective(1000px) rotateX(0deg);
+        }
+        
+        .video-container video {
+            width: 100%;
+            display: block;
+            border-radius: 10px;
+        }
+        
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+        }
+        
+        .video-overlay.visible {
             opacity: 1;
         }
         
-        .timer {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.85rem;
-            color: #a0a0c0;
+        .play-button {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #000;
+            border: none;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            font-size: 2rem;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+            pointer-events: all;
+            animation: pulseButton 2s infinite;
         }
         
-        .controls {
+        @keyframes pulseButton {
+            0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 255, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+        }
+        
+        .play-button:hover {
+            background-color: #fff;
+            transform: scale(1.05);
+            animation: none;
+        }
+        
+        .video-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            padding: 0 20px;
+        }
+        
+        .video-controls {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            padding: 15px 0;
+            max-width: 800px;
+            margin: 20px auto 0;
+            flex-wrap: wrap;
+            gap: 10px;
+            animation: fadeIn 1.5s ease-out 0.5s both;
         }
         
         .control-btn {
-            background: none;
-            border: none;
+            background-color: rgba(34, 34, 34, 0.8);
             color: #fff;
-            font-size: 1.5rem;
-            margin: 0 15px;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
             display: flex;
-            justify-content: center;
             align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .control-btn:hover {
-            background-color: rgba(233, 69, 96, 0.2);
-            color: #e94560;
-            transform: scale(1.1);
-        }
-        
-        .play-pause {
-            background-color: #e94560;
-            width: 60px;
-            height: 60px;
-            font-size: 1.8rem;
-        }
-        
-        .play-pause:hover {
-            background-color: #ff5773;
-            color: #fff;
-        }
-        
-        .volume-container {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .volume-container i {
-            margin-right: 10px;
-            color: #a0a0c0;
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
         }
         
         .volume-slider {
-            width: 100%;
-            height: 5px;
+            width: 120px;
             -webkit-appearance: none;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #25D366, #fff);
             outline: none;
         }
         
         .volume-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 15px;
-            height: 15px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            background: #e94560;
+            background: #fff;
             cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
         
-        .playlist {
-            max-height: 300px;
-            overflow-y: auto;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 15px;
+        /* Visualizador de audio */
+        #audio-visualizer {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 100px;
+            margin: 20px auto;
+            max-width: 800px;
+            gap: 3px;
         }
         
-        .playlist h3 {
+        .bar {
+            width: 10px;
+            background: linear-gradient(to top, #25D366, #fff);
+            border-radius: 3px 3px 0 0;
+            transition: height 0.1s;
+            animation: barAnimation 1.5s infinite alternate;
+        }
+        
+        @keyframes barAnimation {
+            0% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+        
+        .whatsapp-section {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: rgba(17, 17, 17, 0.8);
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 2.2s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .whatsapp-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(37, 211, 102, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .whatsapp-icon {
+            font-size: 5rem;
+            color: #25D366;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+            animation: bounce 2s infinite alternate;
+        }
+        
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-10px); }
+        }
+        
+        .whatsapp-description {
+            font-size: 1.2rem;
+            color: #ccc;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .whatsapp-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            background: linear-gradient(90deg, #25D366, #1da851);
+            color: #fff;
+            text-decoration: none;
+            padding: 20px 40px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .whatsapp-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.7s;
+        }
+        
+        .whatsapp-btn:hover::before {
+            left: 100%;
+        }
+        
+        .whatsapp-btn:hover {
+            background: linear-gradient(90deg, #1da851, #25D366);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.5);
+        }
+        
+        .whatsapp-btn i {
+            font-size: 2rem;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+            animation: fadeInUp 2.4s ease-out;
+        }
+        
+        .feature {
+            background-color: rgba(17, 17, 17, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.5s;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #ff00cc, #3333ff);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s;
+        }
+        
+        .feature:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .feature:hover {
+            transform: translateY(-15px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .feature i {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #ff00cc, #3333ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            transition: transform 0.5s;
+        }
+        
+        .feature:hover i {
+            transform: scale(1.2) rotate(10deg);
+        }
+        
+        .feature h3 {
+            font-size: 1.5rem;
             margin-bottom: 15px;
             color: #fff;
-            padding-left: 10px;
         }
         
-        .song {
-            display: flex;
-            align-items: center;
-            padding: 10px 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        
-        .song:hover {
-            background-color: rgba(255, 255, 255, 0.05);
-        }
-        
-        .song.active {
-            background-color: rgba(233, 69, 96, 0.2);
-            border-left: 3px solid #e94560;
-        }
-        
-        .song-cover {
-            width: 40px;
-            height: 40px;
-            border-radius: 5px;
-            margin-right: 15px;
-            object-fit: cover;
-        }
-        
-        .song-details {
-            flex: 1;
-        }
-        
-        .song-name {
-            font-size: 0.95rem;
-            color: #fff;
-        }
-        
-        .song-artist {
-            font-size: 0.8rem;
-            color: #a0a0c0;
-        }
-        
-        .song-duration {
-            font-size: 0.8rem;
-            color: #a0a0c0;
+        .feature p {
+            color: #aaa;
         }
         
         footer {
             text-align: center;
-            padding: 15px;
-            color: #a0a0c0;
-            font-size: 0.8rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            margin-top: 10px;
+            padding: 30px 0;
+            color: #777;
+            font-size: 0.9rem;
+            animation: fadeIn 3s ease-out;
+            position: relative;
+            z-index: 1;
         }
         
-        /* Scrollbar personalizada */
-        ::-webkit-scrollbar {
-            width: 8px;
+        footer a {
+            color: #aaa;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            display: inline-block;
         }
         
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 4px;
+        footer a:hover {
+            color: #fff;
+            transform: translateY(-5px) scale(1.2);
         }
         
-        ::-webkit-scrollbar-thumb {
-            background: rgba(233, 69, 96, 0.6);
-            border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(233, 69, 96, 0.8);
-        }
-        
-        /* Responsive */
-        @media (max-width: 600px) {
-            .container {
-                border-radius: 15px;
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2.8rem;
             }
             
-            .album-art {
-                width: 180px;
-                height: 180px;
+            .video-container {
+                border-radius: 5px;
+                transform: perspective(1000px) rotateX(0);
+            }
+            
+            .whatsapp-btn {
+                padding: 15px 30px;
+                font-size: 1.3rem;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .video-controls {
+                justify-content: center;
+            }
+            
+            .control-btn span {
+                display: none;
             }
             
             .control-btn {
-                margin: 0 10px;
+                padding: 12px;
             }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+        
+        /* Efecto de ondas sonoras */
+        .sound-wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            overflow: hidden;
+            z-index: -1;
+        }
+        
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="rgba(255,255,255,0.03)"/></svg>');
+            background-size: 1200px 100px;
+            animation: wave 12s linear infinite;
+        }
+        
+        .wave:nth-child(2) {
+            opacity: 0.5;
+            animation: wave-reverse 10s linear infinite;
+        }
+        
+        .wave:nth-child(3) {
+            opacity: 0.3;
+            animation: wave 14s linear infinite;
+        }
+        
+        @keyframes wave {
+            0% { background-position-x: 0; }
+            100% { background-position-x: 1200px; }
+        }
+        
+        @keyframes wave-reverse {
+            0% { background-position-x: 1200px; }
+            100% { background-position-x: 0; }
         }
     </style>
 </head>
 <body>
+    <!-- Fondo con partículas animadas -->
+    <div id="particles-container"></div>
+    
+    <!-- Notas musicales flotantes -->
+    <div id="music-notes-container"></div>
+    
+    <!-- Ondas sonoras en el fondo -->
+    <div class="sound-wave">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+    
     <div class="container">
         <header>
-            <h1><i class="fas fa-music"></i> Reproductor Musical Sencillo</h1>
+            <h1 class="logo">KERIM <span>MUSIC</span></h1>
+            <p class="tagline">Donde la pasión por la música se encuentra con la comunidad</p>
         </header>
         
-        <div class="player">
-            <div class="song-info">
-                <div class="album-art">
-                    <img id="current-album-art" src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Portada de álbum">
-                </div>
-                <h2 class="song-title" id="current-song-title">Canción Ejemplo</h2>
-                <p class="artist" id="current-artist">Artista Ejemplo</p>
-            </div>
-            
-            <div class="progress-area">
-                <div class="progress-bar" id="progress-bar">
-                    <div class="progress" id="progress"></div>
-                </div>
-                <div class="timer">
-                    <span class="current-time" id="current-time">0:00</span>
-                    <span class="duration" id="duration">0:00</span>
+        <section class="video-section">
+            <h2 class="section-title">Nuestro Último Video</h2>
+            <div class="video-container">
+                <!-- Video con atributos para reproducción automática -->
+                <video id="mainVideo" poster="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" 
+                       autoplay muted playsinline>
+                    <source src="https://www.dropbox.com/scl/fi/kefvcotm5qml2oqqj0cyu/1230-02_1767135165303.mp4?rlkey=t0ozj8ggj6svmhu4gm6k81j2h&st=l2xfnww5&raw=1" type="video/mp4">
+                    Tu navegador no soporta el elemento de video.
+                </video>
+                <div class="video-overlay" id="videoOverlay">
+                    <button class="play-button" id="playButton">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <p class="video-title">Kerim Music - Sesión en vivo 2023</p>
                 </div>
             </div>
             
-            <div class="controls">
-                <button class="control-btn" id="prev-btn" title="Canción anterior">
-                    <i class="fas fa-step-backward"></i>
+            <!-- Visualizador de audio simulado -->
+            <div id="audio-visualizer"></div>
+            
+            <div class="video-controls">
+                <button class="control-btn" id="playPauseBtn">
+                    <i class="fas fa-pause"></i> <span>Pausar</span>
                 </button>
-                <button class="control-btn play-pause" id="play-pause-btn" title="Reproducir/Pausar">
-                    <i class="fas fa-play" id="play-icon"></i>
+                <button class="control-btn" id="muteBtn">
+                    <i class="fas fa-volume-up"></i> <span>Silenciar</span>
                 </button>
-                <button class="control-btn" id="next-btn" title="Siguiente canción">
-                    <i class="fas fa-step-forward"></i>
+                <input type="range" min="0" max="1" step="0.1" value="1" class="volume-slider" id="volumeSlider">
+                <button class="control-btn" id="fullscreenBtn">
+                    <i class="fas fa-expand"></i> <span>Pantalla completa</span>
                 </button>
             </div>
-            
-            <div class="volume-container">
-                <i class="fas fa-volume-up"></i>
-                <input type="range" min="0" max="100" value="70" class="volume-slider" id="volume-slider" title="Volumen">
+        </section>
+        
+        <section class="whatsapp-section">
+            <div class="whatsapp-icon">
+                <i class="fab fa-whatsapp"></i>
             </div>
-            
-            <div class="playlist">
-                <h3>Lista de reproducción</h3>
-                <div id="playlist-container">
-                    <!-- Las canciones se insertarán aquí con JavaScript -->
+            <h2 class="section-title">Únete a Nuestra Comunidad</h2>
+            <p class="whatsapp-description">
+                Forma parte del grupo exclusivo de Kerim Music en WhatsApp. Conéctate con otros amantes de la música, recibe notificaciones de nuevos lanzamientos, participa en sorteos exclusivos y sé el primero en enterarte de nuestros eventos en vivo.
+            </p>
+            <a href="https://wa.me/524621098798?text=Hola,%20quiero%20unirme%20al%20grupo%20de%20Kerim%20Music" class="whatsapp-btn" target="_blank">
+                <i class="fab fa-whatsapp"></i> Unirme al Grupo de WhatsApp
+            </a>
+        </section>
+        
+        <section class="features-section">
+            <h2 class="section-title">¿Qué Ofrecemos?</h2>
+            <div class="features">
+                <div class="feature">
+                    <i class="fas fa-music"></i>
+                    <h3>Nuevos Lanzamientos</h3>
+                    <p>Sé el primero en escuchar nuestras nuevas canciones y proyectos musicales.</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h3>Eventos Exclusivos</h3>
+                    <p>Información anticipada sobre conciertos, sesiones en vivo y meet & greets.</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-users"></i>
+                    <h3>Comunidad Activa</h3>
+                    <p>Conecta con otros fans y comparte tu pasión por la música.</p>
                 </div>
             </div>
-        </div>
+        </section>
         
         <footer>
-            <p>Reproductor Musical Sencillo &copy; 2023 - Hecho con <i class="fas fa-heart" style="color:#e94560;"></i></p>
+            <p>&copy; 2023 Kerim Music. Todos los derechos reservados.</p>
+            <p>Síguenos en redes sociales: 
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-spotify"></i></a>
+            </p>
         </footer>
     </div>
 
     <script>
-        // Datos de las canciones
-        const songs = [
-            {
-                title: "Lofi Vibes",
-                artist: "Chill Beats",
-                src: "https://www.dropbox.com/scl/fi/ojsqvdfjnhdhy4khif3zm/Castillo-Embrujado-M-sica-de-Halloween-Sonidos-de-Truenos-Miedo.mp3?rlkey=fs5d25zsku7r4kmb2dl2dfifd&st=0cu3qzm1&raw=1",
-                cover: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
-                duration: "2:45"
-            },
-        ];
-
         // Elementos del DOM
-        const audioPlayer = new Audio();
-        const currentSongTitle = document.getElementById('current-song-title');
-        const currentArtist = document.getElementById('current-artist');
-        const currentAlbumArt = document.getElementById('current-album-art');
-        const playPauseBtn = document.getElementById('play-pause-btn');
-        const playIcon = document.getElementById('play-icon');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const progressBar = document.getElementById('progress-bar');
-        const progress = document.getElementById('progress');
-        const currentTimeEl = document.getElementById('current-time');
-        const durationEl = document.getElementById('duration');
-        const volumeSlider = document.getElementById('volume-slider');
-        const playlistContainer = document.getElementById('playlist-container');
-
-        // Variables del estado
-        let currentSongIndex = 0;
-        let isPlaying = false;
-
-        // Inicializar el reproductor
-        function initPlayer() {
-            // Cargar la primera canción
-            loadSong(currentSongIndex);
+        const video = document.getElementById('mainVideo');
+        const playButton = document.getElementById('playButton');
+        const videoOverlay = document.getElementById('videoOverlay');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const muteBtn = document.getElementById('muteBtn');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+        const audioVisualizer = document.getElementById('audio-visualizer');
+        const particlesContainer = document.getElementById('particles-container');
+        const musicNotesContainer = document.getElementById('music-notes-container');
+        
+        // Crear partículas de fondo
+        function createParticles() {
+            const particleCount = 100;
             
-            // Crear la lista de reproducción
-            renderPlaylist();
-            
-            // Configurar eventos
-            setupEventListeners();
-        }
-
-        // Cargar una canción
-        function loadSong(index) {
-            const song = songs[index];
-            
-            // Actualizar elementos de la UI
-            currentSongTitle.textContent = song.title;
-            currentArtist.textContent = song.artist;
-            currentAlbumArt.src = song.cover;
-            currentAlbumArt.alt = `Portada de ${song.title}`;
-            
-            // Cargar el audio
-            audioPlayer.src = song.src;
-            
-            // Actualizar la canción activa en la lista
-            updateActiveSong();
-            
-            // Cuando los metadatos del audio están cargados
-            audioPlayer.addEventListener('loadedmetadata', () => {
-                durationEl.textContent = formatTime(audioPlayer.duration);
-            });
-            
-            // Si estaba reproduciendo, continuar reproduciendo
-            if (isPlaying) {
-                audioPlayer.play();
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Posición aleatoria
+                const left = Math.random() * 100;
+                const delay = Math.random() * 15;
+                const duration = 10 + Math.random() * 20;
+                const size = 1 + Math.random() * 3;
+                
+                particle.style.left = `${left}%`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.opacity = 0.3 + Math.random() * 0.5;
+                
+                particlesContainer.appendChild(particle);
             }
         }
-
-        // Renderizar la lista de reproducción
-        function renderPlaylist() {
-            playlistContainer.innerHTML = '';
+        
+        // Crear notas musicales flotantes
+        function createMusicNotes() {
+            const noteCount = 15;
+            const notes = ['♪', '♫', '♬', '♩', '♪', '♫'];
             
-            songs.forEach((song, index) => {
-                const songElement = document.createElement('div');
-                songElement.className = index === currentSongIndex ? 'song active' : 'song';
-                songElement.dataset.index = index;
+            for (let i = 0; i < noteCount; i++) {
+                const note = document.createElement('div');
+                note.classList.add('music-note');
                 
-                songElement.innerHTML = `
-                    <img src="${song.cover}" alt="${song.title}" class="song-cover">
-                    <div class="song-details">
-                        <div class="song-name">${song.title}</div>
-                        <div class="song-artist">${song.artist}</div>
-                    </div>
-                    <div class="song-duration">${song.duration}</div>
-                `;
+                // Posición aleatoria
+                const left = Math.random() * 100;
+                const delay = Math.random() * 20;
+                const duration = 15 + Math.random() * 25;
+                const fontSize = 20 + Math.random() * 30;
+                const noteChar = notes[Math.floor(Math.random() * notes.length)];
                 
-                songElement.addEventListener('click', () => {
-                    currentSongIndex = index;
-                    loadSong(currentSongIndex);
-                    playSong();
+                note.textContent = noteChar;
+                note.style.left = `${left}%`;
+                note.style.animationDelay = `${delay}s`;
+                note.style.animationDuration = `${duration}s`;
+                note.style.fontSize = `${fontSize}px`;
+                note.style.color = `rgba(255, 255, 255, ${0.3 + Math.random() * 0.5})`;
+                
+                musicNotesContainer.appendChild(note);
+            }
+        }
+        
+        // Crear visualizador de audio simulado
+        function createAudioVisualizer() {
+            const barCount = 40;
+            
+            for (let i = 0; i < barCount; i++) {
+                const bar = document.createElement('div');
+                bar.classList.add('bar');
+                
+                // Altura aleatoria para simular música
+                const randomHeight = 20 + Math.random() * 80;
+                const delay = Math.random() * 1.5;
+                
+                bar.style.height = `${randomHeight}%`;
+                bar.style.animationDelay = `${delay}s`;
+                bar.style.animationDuration = `${0.5 + Math.random() * 1}s`;
+                
+                audioVisualizer.appendChild(bar);
+                
+                // Animar las barras periódicamente
+                setInterval(() => {
+                    const newHeight = 20 + Math.random() * 80;
+                    bar.style.height = `${newHeight}%`;
+                }, 500 + Math.random() * 1000);
+            }
+        }
+        
+        // Inicializar el video al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            // Crear efectos visuales
+            createParticles();
+            createMusicNotes();
+            createAudioVisualizer();
+            
+            // Configurar el video para que se reproduzca automáticamente
+            video.muted = true; // Necesario para autoplay en muchos navegadores
+            video.play().then(() => {
+                console.log("Video reproduciéndose automáticamente");
+                videoOverlay.classList.remove('visible');
+                updatePlayPauseButton();
+            }).catch(error => {
+                console.log("Autoplay bloqueado: ", error);
+                videoOverlay.classList.add('visible');
+                video.muted = false;
+                updateMuteButton();
+            });
+            
+            // Configurar el control de volumen
+            video.volume = volumeSlider.value;
+        });
+        
+        // Reproducir/pausar video desde el botón de superposición
+        playButton.addEventListener('click', () => {
+            video.play().then(() => {
+                videoOverlay.classList.remove('visible');
+                updatePlayPauseButton();
+                // Desactivar mute al hacer clic manualmente
+                if (video.muted) {
+                    video.muted = false;
+                    updateMuteButton();
+                }
+            });
+        });
+        
+        // Mostrar superposición cuando el video termina
+        video.addEventListener('ended', () => {
+            videoOverlay.classList.add('visible');
+            playButton.querySelector('i').className = 'fas fa-redo';
+        });
+        
+        // Ocultar superposición cuando el video se está reproduciendo
+        video.addEventListener('play', () => {
+            videoOverlay.classList.remove('visible');
+            playButton.querySelector('i').className = 'fas fa-play';
+        });
+        
+        // Mostrar superposición cuando el video está en pausa
+        video.addEventListener('pause', () => {
+            if (!video.ended) {
+                videoOverlay.classList.add('visible');
+            }
+        });
+        
+        // Control de reproducción/pausa
+        playPauseBtn.addEventListener('click', () => {
+            if (video.paused || video.ended) {
+                video.play().then(() => {
+                    videoOverlay.classList.remove('visible');
+                    updatePlayPauseButton();
                 });
-                
-                playlistContainer.appendChild(songElement);
-            });
-        }
-
-        // Actualizar la canción activa en la lista
-        function updateActiveSong() {
-            const songElements = document.querySelectorAll('.song');
-            songElements.forEach((songEl, index) => {
-                if (index === currentSongIndex) {
-                    songEl.classList.add('active');
-                } else {
-                    songEl.classList.remove('active');
-                }
-            });
-        }
-
-        // Reproducir canción
-        function playSong() {
-            isPlaying = true;
-            audioPlayer.play();
-            playIcon.classList.remove('fa-play');
-            playIcon.classList.add('fa-pause');
-            playPauseBtn.title = "Pausar";
-        }
-
-        // Pausar canción
-        function pauseSong() {
-            isPlaying = false;
-            audioPlayer.pause();
-            playIcon.classList.remove('fa-pause');
-            playIcon.classList.add('fa-play');
-            playPauseBtn.title = "Reproducir";
-        }
-
-        // Canción anterior
-        function prevSong() {
-            currentSongIndex--;
-            if (currentSongIndex < 0) {
-                currentSongIndex = songs.length - 1;
+            } else {
+                video.pause();
+                updatePlayPauseButton();
             }
-            loadSong(currentSongIndex);
-            playSong();
-        }
-
-        // Siguiente canción
-        function nextSong() {
-            currentSongIndex++;
-            if (currentSongIndex >= songs.length) {
-                currentSongIndex = 0;
+        });
+        
+        // Actualizar botón de reproducción/pausa
+        function updatePlayPauseButton() {
+            const icon = playPauseBtn.querySelector('i');
+            const text = playPauseBtn.querySelector('span');
+            
+            if (video.paused || video.ended) {
+                icon.className = 'fas fa-play';
+                text.textContent = 'Reproducir';
+            } else {
+                icon.className = 'fas fa-pause';
+                text.textContent = 'Pausar';
             }
-            loadSong(currentSongIndex);
-            playSong();
         }
-
-        // Actualizar barra de progreso
-        function updateProgress(e) {
-            const { duration, currentTime } = e.srcElement;
+        
+        // Control de volumen
+        volumeSlider.addEventListener('input', () => {
+            video.volume = volumeSlider.value;
+            video.muted = (video.volume === 0);
+            updateMuteButton();
+        });
+        
+        // Botón de silencio
+        muteBtn.addEventListener('click', () => {
+            video.muted = !video.muted;
+            if (!video.muted && video.volume === 0) {
+                video.volume = 0.5;
+                volumeSlider.value = 0.5;
+            }
+            updateMuteButton();
+        });
+        
+        // Actualizar botón de silencio
+        function updateMuteButton() {
+            const icon = muteBtn.querySelector('i');
+            const text = muteBtn.querySelector('span');
             
-            // Actualizar el tiempo actual
-            currentTimeEl.textContent = formatTime(currentTime);
+            if (video.muted || video.volume === 0) {
+                icon.className = 'fas fa-volume-mute';
+                text.textContent = 'Activar sonido';
+                volumeSlider.value = 0;
+            } else {
+                icon.className = 'fas fa-volume-up';
+                text.textContent = 'Silenciar';
+                volumeSlider.value = video.volume;
+            }
+        }
+        
+        // Pantalla completa
+        fullscreenBtn.addEventListener('click', () => {
+            const videoContainer = document.querySelector('.video-container');
             
-            // Actualizar la barra de progreso
-            const progressPercent = (currentTime / duration) * 100;
-            progress.style.width = `${progressPercent}%`;
-        }
-
-        // Establecer progreso al hacer clic en la barra
-        function setProgress(e) {
-            const width = this.clientWidth;
-            const clickX = e.offsetX;
-            const duration = audioPlayer.duration;
-            
-            audioPlayer.currentTime = (clickX / width) * duration;
-        }
-
-        // Formatear tiempo (segundos a MM:SS)
-        function formatTime(seconds) {
-            if (isNaN(seconds)) return "0:00";
-            
-            const mins = Math.floor(seconds / 60);
-            const secs = Math.floor(seconds % 60);
-            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-        }
-
-        // Actualizar volumen
-        function updateVolume() {
-            audioPlayer.volume = volumeSlider.value / 100;
-        }
-
-        // Configurar event listeners
-        function setupEventListeners() {
-            // Botón de reproducir/pausar
-            playPauseBtn.addEventListener('click', () => {
-                if (isPlaying) {
-                    pauseSong();
-                } else {
-                    playSong();
+            if (!document.fullscreenElement) {
+                if (videoContainer.requestFullscreen) {
+                    videoContainer.requestFullscreen();
+                } else if (videoContainer.webkitRequestFullscreen) {
+                    videoContainer.webkitRequestFullscreen();
+                } else if (videoContainer.msRequestFullscreen) {
+                    videoContainer.msRequestFullscreen();
                 }
-            });
-            
-            // Botones de anterior y siguiente
-            prevBtn.addEventListener('click', prevSong);
-            nextBtn.addEventListener('click', nextSong);
-            
-            // Eventos del reproductor de audio
-            audioPlayer.addEventListener('timeupdate', updateProgress);
-            audioPlayer.addEventListener('ended', nextSong);
-            
-            // Barra de progreso
-            progressBar.addEventListener('click', setProgress);
-            
-            // Control de volumen
-            volumeSlider.addEventListener('input', updateVolume);
-            
-            // Teclado
-            document.addEventListener('keydown', (e) => {
-                // Espacio para reproducir/pausar
-                if (e.code === 'Space') {
-                    e.preventDefault();
-                    if (isPlaying) {
-                        pauseSong();
-                    } else {
-                        playSong();
-                    }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
                 }
-                
-                // Flecha izquierda para canción anterior
-                if (e.code === 'ArrowLeft') {
-                    prevSong();
-                }
-                
-                // Flecha derecha para siguiente canción
-                if (e.code === 'ArrowRight') {
-                    nextSong();
-                }
-            });
-        }
-
-        // Inicializar la aplicación cuando la página esté cargada
-        document.addEventListener('DOMContentLoaded', initPlayer);
+            }
+        });
+        
+        // Actualizar controles cuando cambia el estado del video
+        video.addEventListener('play', updatePlayPauseButton);
+        video.addEventListener('pause', updatePlayPauseButton);
+        video.addEventListener('volumechange', updateMuteButton);
     </script>
 </body>
 </html>
