@@ -3,435 +3,649 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kerim Music - Únete a nuestra comunidad</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>AppStore Futurista</title>
     <style>
+        :root {
+            --primary-color: #ffffff;
+            --secondary-color: #f0f0f0;
+            --accent-color: #4a90e2;
+            --donation-color: #ff6b6b;
+            --whatsapp-color: #25D366;
+            --text-color: #333333;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --glow-color: rgba(255, 255, 255, 0.7);
+            --card-bg: #ffffff;
+            --body-bg: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --footer-color: #666;
+            --border-radius: 12px;
+            --menu-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #1e1e1e;
+            --secondary-color: #2d2d2d;
+            --accent-color: #5da8ff;
+            --donation-color: #ff8585;
+            --whatsapp-color: #128C7E;
+            --text-color: #e0e0e0;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --glow-color: rgba(255, 255, 255, 0.1);
+            --card-bg: #2d2d2d;
+            --body-bg: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            --footer-color: #aaa;
+            --menu-bg: rgba(30, 30, 30, 0.95);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
-            background-color: #0a0a0a;
-            color: #fff;
+            background: var(--body-bg);
+            color: var(--text-color);
+            min-height: 100vh;
+            padding: 20px;
+            transition: background 0.3s ease, color 0.3s ease;
             line-height: 1.6;
-            overflow-x: hidden;
-            position: relative;
         }
-        
-        /* Fondo animado con partículas */
-        #particles-container {
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Menú Hamburguesa */
+        .menu-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1001;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            pointer-events: none;
+        }
+
+        .menu-toggle {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1003;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            transition: all 0.3s ease;
+            pointer-events: all;
+        }
+
+        .menu-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px var(--shadow-color);
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 24px;
+            height: 3px;
+            background: white;
+            margin: 3px 0;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        .menu-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
-            overflow: hidden;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(3px);
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            pointer-events: none;
         }
-        
-        .particle {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background-color: rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
-            animation: float 15s infinite linear;
+
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: all;
         }
-        
-        @keyframes float {
-            0% {
-                transform: translateY(100vh) translateX(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.7;
-            }
-            90% {
-                opacity: 0.7;
-            }
-            100% {
-                transform: translateY(-100px) translateX(100px);
-                opacity: 0;
-            }
-        }
-        
-        /* Notas musicales flotantes */
-        .music-note {
+
+        .menu-sidebar {
             position: fixed;
-            font-size: 24px;
+            top: 0;
+            left: -320px;
+            width: 300px;
+            height: 100%;
+            background: var(--menu-bg);
+            box-shadow: 0 0 30px var(--shadow-color);
+            z-index: 1002;
+            transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 80px 30px 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .menu-sidebar.active {
+            left: 0;
+        }
+
+        .menu-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-title {
+            font-size: 1.8rem;
+            color: var(--text-color);
+            margin-bottom: 10px;
+        }
+
+        .menu-subtitle {
+            color: var(--text-color);
             opacity: 0.7;
-            z-index: -1;
-            animation: floatNote 20s infinite linear;
+            font-size: 0.9rem;
         }
-        
-        @keyframes floatNote {
-            0% {
-                transform: translateY(100vh) translateX(0) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.7;
-            }
-            90% {
-                opacity: 0.7;
-            }
-            100% {
-                transform: translateY(-100px) translateX(100px) rotate(360deg);
-                opacity: 0;
-            }
+
+        .menu-nav {
+            flex: 1;
         }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-            z-index: 1;
+
+        .menu-list {
+            list-style: none;
         }
-        
+
+        .menu-item {
+            margin-bottom: 15px;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .menu-link:hover {
+            background: var(--accent-color);
+            color: white;
+            transform: translateX(10px);
+        }
+
+        .menu-link i {
+            margin-right: 15px;
+            font-size: 1.3rem;
+        }
+
+        .menu-footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            text-align: center;
+            color: var(--text-color);
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* Buscador */
+        .search-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--primary-color);
+            box-shadow: 0 2px 20px var(--shadow-color);
+            z-index: 1000;
+            padding: 15px;
+            transform: translateY(-100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .search-container.active {
+            transform: translateY(0);
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 14px 24px;
+            border: 2px solid var(--accent-color);
+            border-radius: 30px;
+            background: var(--secondary-color);
+            color: var(--text-color);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+            border-color: var(--accent-color);
+        }
+
+        .search-close {
+            background: var(--donation-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .search-close:hover {
+            transform: scale(1.1);
+            background: #ff5252;
+        }
+
+        .search-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.3rem;
+            z-index: 999;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+
+        .search-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px var(--shadow-color);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            font-size: 1.3rem;
+            color: var(--text-color);
+            opacity: 0.7;
+            grid-column: 1 / -1;
+            display: none;
+        }
+
+        .no-results.show {
+            display: block;
+        }
+
         header {
             text-align: center;
-            padding: 40px 0 20px;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
+            padding: 30px 20px;
+            animation: fadeIn 1s ease-out;
             position: relative;
-            overflow: hidden;
-            animation: fadeIn 1.5s ease-out;
+            margin-top: 20px;
         }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        .theme-switch-wrapper {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        
-        .logo {
-            font-size: 4.5rem;
-            font-weight: 900;
-            margin-bottom: 10px;
-            color: #fff;
-            text-transform: uppercase;
-            letter-spacing: 5px;
+
+        .theme-switch {
+            display: inline-block;
+            height: 34px;
             position: relative;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7),
-                         0 0 20px rgba(255, 255, 255, 0.5),
-                         0 0 30px rgba(255, 255, 255, 0.3);
-            animation: pulse 2s infinite alternate;
+            width: 60px;
         }
-        
-        @keyframes pulse {
-            0% {
-                text-shadow: 0 0 10px rgba(255, 255, 255, 0.7),
-                             0 0 20px rgba(255, 255, 255, 0.5),
-                             0 0 30px rgba(255, 255, 255, 0.3);
-            }
-            100% {
-                text-shadow: 0 0 15px rgba(255, 255, 255, 0.9),
-                             0 0 30px rgba(255, 255, 255, 0.7),
-                             0 0 45px rgba(255, 255, 255, 0.5);
-            }
+
+        .theme-switch input {
+            display: none;
         }
-        
-        .logo span {
-            color: #fff;
-            background: linear-gradient(90deg, #ff00cc, #3333ff);
+
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            background-color: white;
+            bottom: 4px;
+            content: "";
+            height: 26px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 26px;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .slider-text {
+            font-weight: 600;
+            color: var(--text-color);
+            font-size: 0.9rem;
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, var(--accent-color), #8a2be2);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            padding: 0 10px;
+            text-shadow: 0 2px 10px var(--shadow-color);
+            position: relative;
+            display: inline-block;
+            letter-spacing: -0.5px;
         }
-        
-        .tagline {
-            font-size: 1.4rem;
-            color: #aaa;
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+            border-radius: 2px;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-top: 25px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 35px;
+            padding: 20px 0 40px;
+        }
+
+        .app-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 8px 30px var(--shadow-color);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            animation: slideUp 0.6s ease-out;
+            animation-fill-mode: both;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .app-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 20px 50px var(--shadow-color);
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--accent-color), #8a2be2);
+            z-index: 1;
+        }
+
+        .app-cover {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+            display: block;
+        }
+
+        .app-card:hover .app-cover {
+            transform: scale(1.08);
+        }
+
+        .app-info {
+            padding: 25px;
+        }
+
+        .app-title {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            color: var(--text-color);
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .app-description {
+            color: var(--text-color);
+            opacity: 0.8;
+            font-size: 0.95rem;
             margin-bottom: 20px;
-            animation: slideIn 1.8s ease-out;
-        }
-        
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-50px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        
-        .video-section {
-            background-color: rgba(17, 17, 17, 0.8);
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 50px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: fadeInUp 2s ease-out;
+            line-height: 1.6;
             position: relative;
             overflow: hidden;
+            transition: max-height 0.4s ease;
         }
-        
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        .app-description.collapsed {
+            max-height: 4.8em;
         }
-        
-        .video-section::before {
+
+        .app-description.expanded {
+            max-height: 500px;
+        }
+
+        .app-description.collapsed::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2em;
+            background: linear-gradient(transparent, var(--card-bg) 90%);
+            pointer-events: none;
+        }
+
+        .toggle-description {
+            background: none;
+            border: none;
+            color: var(--accent-color);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 6px 0;
+            margin-bottom: 20px;
+            display: block;
+            transition: color 0.3s ease;
+            text-align: left;
+            width: 100%;
+        }
+
+        .toggle-description:hover {
+            color: #8a2be2;
+            text-decoration: underline;
+        }
+
+        .download-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--accent-color), #8a2be2);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            text-align: center;
+            margin-bottom: 12px;
+            letter-spacing: 0.3px;
+        }
+
+        .download-btn::before {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-            animation: shine 5s infinite;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s;
         }
-        
-        @keyframes shine {
-            0% { left: -100%; }
-            100% { left: 100%; }
+
+        .download-btn:hover::before {
+            left: 100%;
         }
-        
-        .section-title {
-            font-size: 2.2rem;
-            margin-bottom: 25px;
-            text-align: center;
-            color: #fff;
-            position: relative;
-            display: inline-block;
-            left: 50%;
-            transform: translateX(-50%);
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(74, 144, 226, 0.3);
         }
-        
-        .section-title:after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #fff, transparent);
-            bottom: -10px;
-            left: 0;
+
+        .download-btn:active {
+            transform: translateY(0);
         }
-        
-        .video-container {
-            position: relative;
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.8);
-            transform: perspective(1000px) rotateX(5deg);
-            transition: transform 0.5s;
-        }
-        
-        .video-container:hover {
-            transform: perspective(1000px) rotateX(0deg);
-        }
-        
-        .video-container video {
-            width: 100%;
+
+        .donation-btn {
             display: block;
-            border-radius: 10px;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--donation-color), #ff8e8e);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            text-align: center;
+            margin-bottom: 12px;
+            letter-spacing: 0.3px;
         }
-        
-        .video-overlay {
+
+        .donation-btn::before {
+            content: '';
             position: absolute;
             top: 0;
-            left: 0;
+            left: -100%;
             width: 100%;
             height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: rgba(0, 0, 0, 0.6);
-            opacity: 0;
-            transition: opacity 0.5s;
-            pointer-events: none;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s;
         }
-        
-        .video-overlay.visible {
-            opacity: 1;
+
+        .donation-btn:hover::before {
+            left: 100%;
         }
-        
-        .play-button {
-            background-color: rgba(255, 255, 255, 0.9);
-            color: #000;
-            border: none;
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            font-size: 2rem;
-            cursor: pointer;
-            margin-bottom: 20px;
-            transition: all 0.3s;
-            pointer-events: all;
-            animation: pulseButton 2s infinite;
-        }
-        
-        @keyframes pulseButton {
-            0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(255, 255, 255, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
-        }
-        
-        .play-button:hover {
-            background-color: #fff;
-            transform: scale(1.05);
-            animation: none;
-        }
-        
-        .video-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            text-align: center;
-            padding: 0 20px;
-        }
-        
-        .video-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            max-width: 800px;
-            margin: 20px auto 0;
-            flex-wrap: wrap;
-            gap: 10px;
-            animation: fadeIn 1.5s ease-out 0.5s both;
-        }
-        
-        .control-btn {
-            background-color: rgba(34, 34, 34, 0.8);
-            color: #fff;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 50px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .control-btn:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+
+        .donation-btn:hover {
             transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
         }
-        
-        .volume-slider {
-            width: 120px;
-            -webkit-appearance: none;
-            height: 8px;
-            border-radius: 4px;
-            background: linear-gradient(90deg, #25D366, #fff);
-            outline: none;
+
+        .donation-btn:active {
+            transform: translateY(0);
         }
-        
-        .volume-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #fff;
-            cursor: pointer;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        }
-        
-        /* Visualizador de audio */
-        #audio-visualizer {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            height: 100px;
-            margin: 20px auto;
-            max-width: 800px;
-            gap: 3px;
-        }
-        
-        .bar {
-            width: 10px;
-            background: linear-gradient(to top, #25D366, #fff);
-            border-radius: 3px 3px 0 0;
-            transition: height 0.1s;
-            animation: barAnimation 1.5s infinite alternate;
-        }
-        
-        @keyframes barAnimation {
-            0% { opacity: 0.3; }
-            100% { opacity: 1; }
-        }
-        
-        .whatsapp-section {
-            text-align: center;
-            padding: 40px 20px;
-            background-color: rgba(17, 17, 17, 0.8);
-            border-radius: 15px;
-            margin-bottom: 40px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: fadeInUp 2.2s ease-out;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .whatsapp-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(37, 211, 102, 0.1) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-        }
-        
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .whatsapp-icon {
-            font-size: 5rem;
-            color: #25D366;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 1;
-            animation: bounce 2s infinite alternate;
-        }
-        
-        @keyframes bounce {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-10px); }
-        }
-        
-        .whatsapp-description {
-            font-size: 1.2rem;
-            color: #ccc;
-            max-width: 700px;
-            margin: 0 auto 30px;
-            line-height: 1.8;
-            position: relative;
-            z-index: 1;
-        }
-        
+
         .whatsapp-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 15px;
-            background: linear-gradient(90deg, #25D366, #1da851);
-            color: #fff;
-            text-decoration: none;
-            padding: 20px 40px;
-            font-size: 1.5rem;
-            font-weight: 600;
-            border-radius: 50px;
-            transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--whatsapp-color), #128C7E);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
             position: relative;
-            z-index: 1;
             overflow: hidden;
+            text-decoration: none;
+            text-align: center;
+            margin-bottom: 12px;
+            letter-spacing: 0.3px;
         }
-        
+
         .whatsapp-btn::before {
             content: '';
             position: absolute;
@@ -440,543 +654,712 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.7s;
+            transition: left 0.6s;
         }
-        
+
         .whatsapp-btn:hover::before {
             left: 100%;
         }
-        
+
         .whatsapp-btn:hover {
-            background: linear-gradient(90deg, #1da851, #25D366);
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
         }
-        
-        .whatsapp-btn i {
-            font-size: 2rem;
+
+        .whatsapp-btn:active {
+            transform: translateY(0);
         }
-        
-        .features-section {
-            margin-bottom: 50px;
+
+        .button-icon {
+            margin-right: 10px;
+            font-size: 1.1rem;
+            vertical-align: middle;
         }
-        
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            animation: fadeInUp 2.4s ease-out;
-        }
-        
-        .feature {
-            background-color: rgba(17, 17, 17, 0.8);
-            padding: 30px;
-            border-radius: 10px;
-            text-align: center;
-            transition: all 0.5s;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .feature::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, #ff00cc, #3333ff);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.5s;
-        }
-        
-        .feature:hover::before {
-            transform: scaleX(1);
-        }
-        
-        .feature:hover {
-            transform: translateY(-15px) scale(1.03);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
-        }
-        
-        .feature i {
-            font-size: 3.5rem;
+
+        .app-rating {
+            display: flex;
+            align-items: center;
             margin-bottom: 20px;
-            background: linear-gradient(90deg, #ff00cc, #3333ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            transition: transform 0.5s;
+            padding: 10px 0;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
         }
-        
-        .feature:hover i {
-            transform: scale(1.2) rotate(10deg);
+
+        .stars {
+            color: #ffc107;
+            margin-right: 12px;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
         }
-        
-        .feature h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: #fff;
+
+        .rating-value {
+            font-weight: bold;
+            color: var(--text-color);
+            opacity: 0.9;
+            font-size: 1rem;
         }
-        
-        .feature p {
-            color: #aaa;
-        }
-        
+
         footer {
             text-align: center;
-            padding: 30px 0;
-            color: #777;
-            font-size: 0.9rem;
-            animation: fadeIn 3s ease-out;
-            position: relative;
-            z-index: 1;
+            margin-top: 60px;
+            padding: 30px 20px;
+            color: var(--footer-color);
+            font-size: 0.95rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
         }
-        
-        footer a {
-            color: #aaa;
-            margin: 0 15px;
-            text-decoration: none;
-            font-size: 1.2rem;
-            transition: all 0.3s;
-            display: inline-block;
+
+        .footer-text {
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto;
         }
-        
-        footer a:hover {
-            color: #fff;
-            transform: translateY(-5px) scale(1.2);
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(-20px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0);
+            }
         }
-        
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Retrasos para animaciones escalonadas */
+        .app-card:nth-child(1) { animation-delay: 0.1s; }
+        .app-card:nth-child(2) { animation-delay: 0.2s; }
+        .app-card:nth-child(3) { animation-delay: 0.3s; }
+        .app-card:nth-child(4) { animation-delay: 0.4s; }
+        .app-card:nth-child(5) { animation-delay: 0.5s; }
+        .app-card:nth-child(6) { animation-delay: 0.6s; }
+        .app-card:nth-child(7) { animation-delay: 0.7s; }
+        .app-card:nth-child(8) { animation-delay: 0.8s; }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .apps-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 30px;
+            }
+        }
+
         @media (max-width: 768px) {
-            .logo {
-                font-size: 2.8rem;
+            .apps-grid {
+                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+                gap: 25px;
             }
             
-            .video-container {
-                border-radius: 5px;
-                transform: perspective(1000px) rotateX(0);
+            h1 {
+                font-size: 2.6rem;
+                margin-top: 20px;
             }
             
-            .whatsapp-btn {
-                padding: 15px 30px;
-                font-size: 1.3rem;
-            }
-            
-            .features {
-                grid-template-columns: 1fr;
-            }
-            
-            .video-controls {
+            .theme-switch-wrapper {
+                position: static;
                 justify-content: center;
+                margin-top: 25px;
+                margin-bottom: 15px;
             }
             
-            .control-btn span {
-                display: none;
+            .search-toggle {
+                top: 15px;
+                right: 15px;
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
             }
             
-            .control-btn {
-                padding: 12px;
+            .search-input {
+                padding: 12px 20px;
             }
             
-            .section-title {
-                font-size: 1.8rem;
+            header {
+                padding: 20px 15px;
+                margin-bottom: 40px;
+            }
+            
+            .menu-sidebar {
+                width: 280px;
+                left: -280px;
             }
         }
-        
-        /* Efecto de ondas sonoras */
-        .sound-wave {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100px;
-            overflow: hidden;
-            z-index: -1;
+
+        @media (max-width: 640px) {
+            .apps-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+                padding: 0 10px;
+            }
+            
+            .search-box {
+                flex-direction: row;
+                padding: 0 10px;
+            }
+            
+            .search-close {
+                width: 40px;
+                height: 40px;
+            }
+            
+            body {
+                padding: 15px;
+            }
+            
+            .menu-sidebar {
+                width: 100%;
+                left: -100%;
+            }
+            
+            .menu-toggle {
+                width: 50px;
+                height: 50px;
+            }
         }
-        
-        .wave {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="rgba(255,255,255,0.03)"/></svg>');
-            background-size: 1200px 100px;
-            animation: wave 12s linear infinite;
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.9rem;
+            }
+            
+            .app-card {
+                margin-bottom: 10px;
+            }
+            
+            .app-info {
+                padding: 20px;
+            }
+            
+            .app-title {
+                font-size: 1.4rem;
+            }
+            
+            .download-btn,
+            .donation-btn,
+            .whatsapp-btn {
+                padding: 13px;
+                font-size: 1rem;
+            }
+            
+            .search-toggle {
+                width: 46px;
+                height: 46px;
+                font-size: 1.1rem;
+            }
+            
+            .menu-toggle {
+                width: 46px;
+                height: 46px;
+            }
+            
+            .menu-toggle span {
+                width: 22px;
+                height: 2.5px;
+            }
         }
-        
-        .wave:nth-child(2) {
-            opacity: 0.5;
-            animation: wave-reverse 10s linear infinite;
+
+        /* Mejoras de accesibilidad */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
-        
-        .wave:nth-child(3) {
-            opacity: 0.3;
-            animation: wave 14s linear infinite;
+
+        /* Focus styles para accesibilidad */
+        button:focus,
+        input:focus,
+        a:focus {
+            outline: 2px solid var(--accent-color);
+            outline-offset: 2px;
         }
-        
-        @keyframes wave {
-            0% { background-position-x: 0; }
-            100% { background-position-x: 1200px; }
+
+        /* Scrollbar personalizada */
+        ::-webkit-scrollbar {
+            width: 10px;
         }
-        
-        @keyframes wave-reverse {
-            0% { background-position-x: 1200px; }
-            100% { background-position-x: 0; }
+
+        ::-webkit-scrollbar-track {
+            background: var(--secondary-color);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8a2be2;
         }
     </style>
 </head>
 <body>
-    <!-- Fondo con partículas animadas -->
-    <div id="particles-container"></div>
-    
-    <!-- Notas musicales flotantes -->
-    <div id="music-notes-container"></div>
-    
-    <!-- Ondas sonoras en el fondo -->
-    <div class="sound-wave">
-        <div class="wave"></div>
-        <div class="wave"></div>
-        <div class="wave"></div>
+    <!-- Menú Hamburguesa -->
+    <div class="menu-container">
+        <button class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </div>
     
+    <!-- Overlay del menú -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+    
+    <!-- Sidebar del menú -->
+    <div class="menu-sidebar" id="menuSidebar">
+        <div class="menu-header">
+            <h2 class="menu-title">Menu</h2>
+            <p class="menu-subtitle">Navegación</p>
+        </div>
+        
+        <nav class="menu-nav">
+            <ul class="menu-list">
+                <li class="menu-item">
+                    <a href="#" class="menu-link" id="homeLink">
+                        <i>🏠</i> Inicio
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="Index2.html" class="menu-link">
+                        <i>ℹ️</i> Informacióna
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link" id="searchMenuLink">
+                        <i>🔍</i> Buscar Apps
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://link.mercadopago.com.mx/hfcompanydon" class="menu-link" target="_blank">
+                        <i>❤️</i> Donaciones
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        
+        <div class="menu-footer">
+            <p>© 2023 AppStore Futurista</p>
+        </div>
+    </div>
+    
+    <!-- Botón para activar el buscador -->
+    <button class="search-toggle" id="searchToggle">🔍</button>
+    
+    <!-- Contenedor del buscador -->
+    <div class="search-container" id="searchContainer">
+        <div class="search-box">
+            <input type="text" class="search-input" id="searchInput" placeholder="Buscar aplicaciones...">
+            <button class="search-close" id="searchClose">✕</button>
+        </div>
+    </div>
+
     <div class="container">
         <header>
-            <h1 class="logo">KERIM <span>MUSIC</span></h1>
-            <p class="tagline">Donde la pasión por la música se encuentra con la comunidad</p>
+            <h1>Encuentra tus programas y App a un precio bajo y Gratis</h1>
+            <p class="subtitle">Descubre las mejores aplicaciones con diseño innovador</p>
+            
+            <div class="theme-switch-wrapper">
+                <span class="slider-text">Modo Oscuro</span>
+                <label class="theme-switch" for="checkbox">
+                    <input type="checkbox" id="checkbox" />
+                    <div class="slider"></div>
+                </label>
+            </div>
         </header>
-        
-        <section class="video-section">
-            <h2 class="section-title">Nuestro Último Video</h2>
-            <div class="video-container">
-                <!-- Video con volumen activo -->
-                <video id="mainVideo" poster="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" 
-                       playsinline>
-                    <source src="https://www.dropbox.com/scl/fi/kefvcotm5qml2oqqj0cyu/1230-02_1767135165303.mp4?rlkey=t0ozj8ggj6svmhu4gm6k81j2h&st=l2xfnww5&raw=1" type="video/mp4">
-                    Tu navegador no soporta el elemento de video.
-                </video>
-                <div class="video-overlay" id="videoOverlay">
-                    <button class="play-button" id="playButton">
-                        <i class="fas fa-play"></i>
-                    </button>
-                    <p class="video-title">Kerim Music - Sesión en vivo 2023</p>
-                </div>
-            </div>
-            
-            <!-- Visualizador de audio simulado -->
-            <div id="audio-visualizer"></div>
-            
-            <div class="video-controls">
-                <button class="control-btn" id="playPauseBtn">
-                    <i class="fas fa-play"></i> <span>Reproducir</span>
-                </button>
-                <button class="control-btn" id="muteBtn">
-                    <i class="fas fa-volume-up"></i> <span>Silenciar</span>
-                </button>
-                <input type="range" min="0" max="1" step="0.1" value="0.5" class="volume-slider" id="volumeSlider">
-                <button class="control-btn" id="fullscreenBtn">
-                    <i class="fas fa-expand"></i> <span>Pantalla completa</span>
-                </button>
-            </div>
-        </section>
-        
-        <section class="whatsapp-section">
-            <div class="whatsapp-icon">
-                <i class="fab fa-whatsapp"></i>
-            </div>
-            <h2 class="section-title">Únete a Nuestra Comunidad</h2>
-            <p class="whatsapp-description">
-                Forma parte del grupo exclusivo de Kerim Music en WhatsApp. Conéctate con otros amantes de la música, recibe notificaciones de nuevos lanzamientos, participa en sorteos exclusivos y sé el primero en enterarte de nuestros eventos en vivo.
-            </p>
-            <a href="https://chat.whatsapp.com/CfB6EYEt2se7xNcgt0iOwm" class="whatsapp-btn" target="_blank">
-                <i class="fab fa-whatsapp"></i> Unirme al Grupo de WhatsApp
-            </a>
-        </section>
-        
-        <section class="features-section">
-            <h2 class="section-title">¿Qué Ofrecemos?</h2>
-            <div class="features">
-                <div class="feature">
-                    <i class="fas fa-music"></i>
-                    <h3>Nuevos Lanzamientos</h3>
-                    <p>Sé el primero en escuchar nuestras nuevas canciones y proyectos musicales.</p>
-                </div>
-                <div class="feature">
-                    <i class="fas fa-calendar-alt"></i>
-                    <h3>Eventos Exclusivos</h3>
-                    <p>Información anticipada sobre conciertos, sesiones en vivo y meet & greets.</p>
-                </div>
-                <div class="feature">
-                    <i class="fas fa-users"></i>
-                    <h3>Comunidad Activa</h3>
-                    <p>Conecta con otros fans y comparte tu pasión por la música.</p>
-                </div>
-            </div>
-        </section>
-        
+
+        <div class="apps-grid" id="appsGrid">
+            <!-- Las aplicaciones se cargarán aleatoriamente aquí mediante JavaScript -->
+        </div>
+
         <footer>
-            <p>&copy; 2023 Kerim Music. Todos los derechos reservados.</p>
-            <p>Síguenos en redes sociales: 
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-youtube"></i></a>
-                <a href="#"><i class="fab fa-spotify"></i></a>
-            </p>
+            <p>© 2023 AppStore Futurista - Todas las aplicaciones son propiedad de sus respectivos desarrolladores</p>
         </footer>
     </div>
 
     <script>
-        // Elementos del DOM
-        const video = document.getElementById('mainVideo');
-        const playButton = document.getElementById('playButton');
-        const videoOverlay = document.getElementById('videoOverlay');
-        const playPauseBtn = document.getElementById('playPauseBtn');
-        const muteBtn = document.getElementById('muteBtn');
-        const volumeSlider = document.getElementById('volumeSlider');
-        const fullscreenBtn = document.getElementById('fullscreenBtn');
-        const audioVisualizer = document.getElementById('audio-visualizer');
-        const particlesContainer = document.getElementById('particles-container');
-        const musicNotesContainer = document.getElementById('music-notes-container');
-        
-        // Crear partículas de fondo
-        function createParticles() {
-            const particleCount = 100;
+        // Datos de las aplicaciones
+        const appsData = [
+            {
+                id: 1,
+                title: "mcpro24",
+                rating: "Donacion",
+                image: "https://play-lh.googleusercontent.com/KE_qe2jHeX3mVsPVP3ceuVPgDKL8uN1LuNRblXnAnYrdtlqwryKWeTbAiiqFGVX72cw",
+                description: "mcpro24fps: Es una app para Android que convierte tu celular en una cámara de video muy profesional. Permite grabar con perfiles 'log', usar LUTs, hacer zoom, ajustar enfoque manual, balance de blancos en Kelvin, trabajar con metadatos, y más. Tiene grabación en varios fps (24, 25, 30, 60, etc.). Puede usar códecs AVC (H.264) y HEVC (H.265). Ofrece estabilización, reducción de ruido, curvas de registro, LUT en pantalla y más para hacer 'cine' con el teléfono. Compatible con varios micrófonos/sources de audio y puede grabar en WAV o AAC. Depende de las capacidades del dispositivo: necesita que tu celular soporte la API Camera2.",
+                downloadLink: "https://download2334.mediafire.com/xc3sgm49n5hgM0ge84gEi2K50KjopCx708O8wKsal3r882zFuzAVhBbp9L7ziWv0s6SAS0TbLFrpANRiFrd5FFz830dOMX0UBrQTA6yPI0SlYtAXP9nzNFTvpE8F56bkpJZIGKRcvD13dnCmo5oD3WAhSObwIWE-CMl60mvJfSnrlA/8b58z44b3dtxft9/up-mod-mcpro24fps-manual-video-camera-mod-apk-041a-41002.apk",
+                whatsappLink: "https://wa.link/1zy3n0",
+                donationLink: "https://link.mercadopago.com.mx/hfcompanydon"
+            },
+            {
+                id: 2,
+                title: "MagisTV APK",
+                rating: "Gratis",
+                image: "https://culturageek.com.ar/wp-content/uploads/2024/08/Magis-TV-www.culturageek.com_.ar_.webp",
+                description: "Es una aplicación tipo IPTV (televisión por internet) que ofrece una gran cantidad de canales en vivo, películas y series. Magis TV tiene un catálogo muy amplio: según algunos reportes, ofrece más de 1,300 canales en vivo, más de 50,000 películas y series, y una gran cantidad de contenido deportivo. Está pensada para usuarios de Latinoamérica.",
+                downloadLink: "https://magistv.icu/file/magis-celular.apk",
+                whatsappLink: "https://wa.me/524623604032?text=Me%20interesa%20Adobe%20Audition%201.5%20(Donaci%C3%B3n)",
+                donationLink: "https://link.mercadopago.com.mx/hfcompanydon"
+            },
+            {
+                id: 3,
+                title: "Office 365",
+                rating: "Gratis",
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7OcJnffwUgi97eDoSjpSmw21FsMzyyjqkIg&s",
+                description: "Office 365, ahora conocido como Microsoft 365, es un servicio de suscripción que ofrece un conjunto de aplicaciones y herramientas para trabajar, estudiar y colaborar desde cualquier lugar, ya sea en computadora, tablet o teléfono. Incluye las aplicaciones clásicas de Office, además de servicios en la nube y herramientas de trabajo en equipo. Con Microsoft 365, puedes acceder a las últimas versiones de Word, Excel, PowerPoint, Outlook y más, con actualizaciones automáticas y funciones mejoradas regularmente.",
+                downloadLink: "https://download2389.mediafire.com/u4a5gx6lx10gSjzGc-8qpqLnkFEbu3PxUrz75Mx6EmqCMyqQmLoDoQLyC42PdxKnmtqL3_0Tu68YIvHjl97CbWjSH8T2KMehLZZdKdxM5w4I2xDd9VKe6mitpnUGlougS-cYtmvop_CYMw02Xg9mHivt7D2f1QM2R3uE7YI5VDZNaw/k6jk9wuan8ks33e/Microsoft+Office+2019++Espa%C3%B1ol+-Ingles.rar",
+                whatsappLink: "https://wa.me/524623604032?text=Me%20interesa%20Adobe%20Audition%201.5%20(Donaci%C3%B3n)",
+                donationLink: "https://link.mercadopago.com.mx/hfcompanydon"
+            },
+            {
+                id: 4,
+                title: "Adobe Audition 1.5",
+                rating: "Donación",
+                image: "https://m.media-amazon.com/images/I/41v7yShWGbL._SY342_.jpg",
+                description: "Adobe Audition 1.5, lanzado en 2004, es una estación de trabajo de audio digital (DAW) que se hizo muy popular por su estabilidad, facilidad de uso y herramientas precisas para edición y restauración de audio. Es una evolución del antiguo Cool Edit Pro, manteniendo su sencillez pero integrando funciones más profesionales bajo Adobe.",
+                downloadLink: "https://download2303.mediafire.com/k0so7m0jt2sgQl49eL16BF7ebqwOPj4gqwSQKuWCPamiixQb5obJGueRf5-4UEfpU9C8cOuACU_iwEj01pSyxekgq6UzIqz-EVcWMcnXgEHNyq3is62ZqzFC4HlBQ5a2-i2DJTSgvk_ew_mt-o3MkuUSAq8kao2tsSUQKU8RIzfGbA/c1hw8lzdtscau2k/AdobeAudition1.5%28%28%28www.TheDjShowMixCcs.Blogspot.com%29%29%29.rar",
+                whatsappLink: "https://wa.me/524623604032?text=Me%20interesa%20Adobe%20Audition%201.5%20(Donaci%C3%B3n)",
+                donationLink: "https://link.mercadopago.com.mx/hfcompanydon"
+            },
+            {
+                id: 5,
+                title: "Filmora 14",
+                rating: "Gratis",
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyHUKGTm6I-_cU8Wz5-LqmjQbckcVF_IB4ow&s",
+                description: "Filmora 14 es un software de edición de video que se caracteriza por su interfaz intuitiva y la integración extensiva de funciones impulsadas por inteligencia artificial (IA), diseñadas para simplificar el flujo de trabajo y mejorar la eficiencia tanto para principiantes como para creadores de contenido más avanzados.",
+                downloadLink: "https://download2389.mediafire.com/4jlgdox8elbgjle2cN7tEqzFxJQzjt4dPgTNXRMldaVQA7C_Hjue6ISFTnkYsq0mcck4GeZANnAofSOF2SKUV5jOPISys4jLZHTmi-ZIrlYKY4uM_tLBbHTEOvwIMdlvez6oVYMTVp_hA9UraIgQqIozZFoeByEI4uZhadjR7aNv8w/2ovur7o08vsl5ct/Wondershare+Filmora+v14.5.18.12900.Portable+%28harolds%29.x64.rar",
+                whatsappLink: "https://wa.me/524623604032?text=Me%20interesa%20Adobe%20Audition%201.5%20(Donaci%C3%B3n)",
+                donationLink: "https://link.mercadopago.com.mx/hfcompanydon"
+            }
+        ];
+
+        // Función para mezclar array aleatoriamente (Fisher-Yates shuffle)
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        // Función para crear una tarjeta de aplicación
+        function createAppCard(app) {
+            const isFree = app.rating.toLowerCase() === "gratis";
             
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-                
-                // Posición aleatoria
-                const left = Math.random() * 100;
-                const delay = Math.random() * 15;
-                const duration = 10 + Math.random() * 20;
-                const size = 1 + Math.random() * 3;
-                
-                particle.style.left = `${left}%`;
-                particle.style.animationDelay = `${delay}s`;
-                particle.style.animationDuration = `${duration}s`;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                particle.style.opacity = 0.3 + Math.random() * 0.5;
-                
-                particlesContainer.appendChild(particle);
+            return `
+                <div class="app-card" data-app-id="${app.id}">
+                    <img src="${app.image}" alt="${app.title}" class="app-cover">
+                    <div class="app-info">
+                        <h3 class="app-title">${app.title}</h3>
+                        <div class="app-rating">
+                            <div class="rating-value">${app.rating}</div>
+                        </div>
+                        <p class="app-description collapsed">${app.description}</p>
+                        <button class="toggle-description">Ver más</button>
+                        
+                        ${isFree ? 
+                            `<a href="${app.downloadLink}" class="download-btn" target="_blank">
+                                <span class="button-icon">↓</span> Descargar
+                            </a>
+                            <a href="${app.whatsappLink}" class="whatsapp-btn" target="_blank" style="display: none;">
+                                <span class="button-icon">💬</span> Contactar por WhatsApp
+                            </a>` 
+                            : 
+                            `<a href="${app.downloadLink}" class="download-btn" target="_blank" style="display: none;">
+                                <span class="button-icon">↓</span> Descargar
+                            </a>
+                            <a href="${app.whatsappLink}" class="whatsapp-btn" target="_blank">
+                                <span class="button-icon">💬</span> Contactar por WhatsApp
+                            </a>`
+                        }
+                        
+                        <a href="${app.donationLink}" class="donation-btn" target="_blank">
+                            <span class="button-icon">❤️</span> Agradecer con una donación
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Función para inicializar la aplicación
+        function initApp() {
+            const appsGrid = document.getElementById('appsGrid');
+            
+            // Mezclar las aplicaciones aleatoriamente
+            const shuffledApps = shuffleArray(appsData);
+            
+            // Crear y agregar las tarjetas de aplicación al DOM
+            shuffledApps.forEach(app => {
+                appsGrid.innerHTML += createAppCard(app);
+            });
+            
+            // Inicializar todas las funcionalidades después de cargar las apps
+            initFunctionalities();
+        }
+
+        // Inicializar la aplicación cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', initApp);
+
+        // Funcionalidad para el interruptor de modo claro/oscuro
+        const toggleSwitch = document.querySelector('#checkbox');
+        const currentTheme = localStorage.getItem('theme');
+
+        if (currentTheme) {
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            
+            if (currentTheme === 'dark') {
+                toggleSwitch.checked = true;
             }
         }
-        
-        // Crear notas musicales flotantes
-        function createMusicNotes() {
-            const noteCount = 15;
-            const notes = ['♪', '♫', '♬', '♩', '♪', '♫'];
-            
-            for (let i = 0; i < noteCount; i++) {
-                const note = document.createElement('div');
-                note.classList.add('music-note');
-                
-                // Posición aleatoria
-                const left = Math.random() * 100;
-                const delay = Math.random() * 20;
-                const duration = 15 + Math.random() * 25;
-                const fontSize = 20 + Math.random() * 30;
-                const noteChar = notes[Math.floor(Math.random() * notes.length)];
-                
-                note.textContent = noteChar;
-                note.style.left = `${left}%`;
-                note.style.animationDelay = `${delay}s`;
-                note.style.animationDuration = `${duration}s`;
-                note.style.fontSize = `${fontSize}px`;
-                note.style.color = `rgba(255, 255, 255, ${0.3 + Math.random() * 0.5})`;
-                
-                musicNotesContainer.appendChild(note);
-            }
+
+        function switchTheme(e) {
+            if (e.target.checked) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            }    
         }
-        
-        // Crear visualizador de audio simulado
-        function createAudioVisualizer() {
-            const barCount = 40;
-            
-            for (let i = 0; i < barCount; i++) {
-                const bar = document.createElement('div');
-                bar.classList.add('bar');
-                
-                // Altura aleatoria para simular música
-                const randomHeight = 20 + Math.random() * 80;
-                const delay = Math.random() * 1.5;
-                
-                bar.style.height = `${randomHeight}%`;
-                bar.style.animationDelay = `${delay}s`;
-                bar.style.animationDuration = `${0.5 + Math.random() * 1}s`;
-                
-                audioVisualizer.appendChild(bar);
-                
-                // Animar las barras periódicamente
-                setInterval(() => {
-                    const newHeight = 20 + Math.random() * 80;
-                    bar.style.height = `${newHeight}%`;
-                }, 500 + Math.random() * 1000);
-            }
+
+        if (toggleSwitch) {
+            toggleSwitch.addEventListener('change', switchTheme, false);
         }
-        
-        // Inicializar el video al cargar la página
-        document.addEventListener('DOMContentLoaded', function() {
-            // Crear efectos visuales
-            createParticles();
-            createMusicNotes();
-            createAudioVisualizer();
+
+        // Funcionalidad del menú hamburguesa
+        function initMenu() {
+            const menuToggle = document.getElementById('menuToggle');
+            const menuOverlay = document.getElementById('menuOverlay');
+            const menuSidebar = document.getElementById('menuSidebar');
+            const homeLink = document.getElementById('homeLink');
+            const searchMenuLink = document.getElementById('searchMenuLink');
             
-            // Configurar el video con volumen activo
-            video.volume = 0.5; // Volumen al 50% por defecto
-            volumeSlider.value = 0.5;
+            // Abrir/cerrar menú
+            function toggleMenu() {
+                menuToggle.classList.toggle('active');
+                menuOverlay.classList.toggle('active');
+                menuSidebar.classList.toggle('active');
+                
+                // Bloquear/desbloquear scroll del body
+                document.body.style.overflow = menuSidebar.classList.contains('active') ? 'hidden' : '';
+            }
             
-            // Intentar reproducción automática con sonido
-            const playPromise = video.play();
+            // Cerrar menú
+            function closeMenu() {
+                menuToggle.classList.remove('active');
+                menuOverlay.classList.remove('active');
+                menuSidebar.classList.remove('active');
+                document.body.style.overflow = '';
+            }
             
-            if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    console.log("Video reproduciéndose automáticamente con sonido");
-                    videoOverlay.classList.remove('visible');
-                    updatePlayPauseButton();
-                }).catch(error => {
-                    console.log("Autoplay bloqueado: ", error);
-                    videoOverlay.classList.add('visible');
-                    updatePlayPauseButton();
+            // Event listeners
+            if (menuToggle) {
+                menuToggle.addEventListener('click', toggleMenu);
+            }
+            
+            if (menuOverlay) {
+                menuOverlay.addEventListener('click', closeMenu);
+            }
+            
+            if (homeLink) {
+                homeLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    closeMenu();
+                    // Scroll al inicio de la página
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
                 });
             }
             
-            // Configurar eventos del video
-            video.addEventListener('play', updatePlayPauseButton);
-            video.addEventListener('pause', updatePlayPauseButton);
-            video.addEventListener('volumechange', updateMuteButton);
-        });
-        
-        // Reproducir/pausar video desde el botón de superposición
-        playButton.addEventListener('click', () => {
-            if (video.paused || video.ended) {
-                video.play().then(() => {
-                    videoOverlay.classList.remove('visible');
-                    updatePlayPauseButton();
+            if (searchMenuLink) {
+                searchMenuLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    closeMenu();
+                    // Abrir el buscador
+                    const searchContainer = document.getElementById('searchContainer');
+                    const searchInput = document.getElementById('searchInput');
+                    
+                    if (searchContainer && searchInput) {
+                        searchContainer.classList.add('active');
+                        searchInput.focus();
+                    }
                 });
-            } else {
-                video.pause();
-                updatePlayPauseButton();
             }
-        });
-        
-        // Mostrar superposición cuando el video termina
-        video.addEventListener('ended', () => {
-            videoOverlay.classList.add('visible');
-            playButton.querySelector('i').className = 'fas fa-redo';
-            updatePlayPauseButton();
-        });
-        
-        // Control de reproducción/pausa
-        playPauseBtn.addEventListener('click', () => {
-            if (video.paused || video.ended) {
-                video.play().then(() => {
-                    videoOverlay.classList.remove('visible');
-                    updatePlayPauseButton();
-                });
-            } else {
-                video.pause();
-                updatePlayPauseButton();
-            }
-        });
-        
-        // Actualizar botón de reproducción/pausa
-        function updatePlayPauseButton() {
-            const icon = playPauseBtn.querySelector('i');
-            const text = playPauseBtn.querySelector('span');
-            const overlayIcon = playButton.querySelector('i');
             
-            if (video.paused || video.ended) {
-                icon.className = 'fas fa-play';
-                text.textContent = 'Reproducir';
-                overlayIcon.className = 'fas fa-play';
-            } else {
-                icon.className = 'fas fa-pause';
-                text.textContent = 'Pausar';
-                overlayIcon.className = 'fas fa-pause';
-            }
-        }
-        
-        // Control de volumen
-        volumeSlider.addEventListener('input', () => {
-            video.volume = volumeSlider.value;
-            video.muted = (video.volume === 0);
-            updateMuteButton();
-        });
-        
-        // Botón de silencio
-        muteBtn.addEventListener('click', () => {
-            video.muted = !video.muted;
-            if (!video.muted && video.volume === 0) {
-                video.volume = 0.5;
-                volumeSlider.value = 0.5;
-            }
-            updateMuteButton();
-        });
-        
-        // Actualizar botón de silencio
-        function updateMuteButton() {
-            const icon = muteBtn.querySelector('i');
-            const text = muteBtn.querySelector('span');
-            
-            if (video.muted || video.volume === 0) {
-                icon.className = 'fas fa-volume-mute';
-                text.textContent = 'Activar sonido';
-            } else {
-                icon.className = 'fas fa-volume-up';
-                text.textContent = 'Silenciar';
-            }
-        }
-        
-        // Pantalla completa
-        fullscreenBtn.addEventListener('click', () => {
-            const videoContainer = document.querySelector('.video-container');
-            
-            if (!document.fullscreenElement) {
-                if (videoContainer.requestFullscreen) {
-                    videoContainer.requestFullscreen();
-                } else if (videoContainer.webkitRequestFullscreen) {
-                    videoContainer.webkitRequestFullscreen();
-                } else if (videoContainer.msRequestFullscreen) {
-                    videoContainer.msRequestFullscreen();
+            // Cerrar menú con tecla Escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && menuSidebar.classList.contains('active')) {
+                    closeMenu();
                 }
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
+            });
+        }
+
+        // Inicializar todas las funcionalidades
+        function initFunctionalities() {
+            // Inicializar menú
+            initMenu();
+            
+            // Añadir funcionalidad a los botones de descarga
+            document.querySelectorAll('.download-btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const originalHTML = this.innerHTML;
+                    const originalBackground = this.style.background;
+                    
+                    this.innerHTML = '<span class="button-icon">⏳</span> Descargando...';
+                    this.style.background = 'linear-gradient(45deg, #8a2be2, #4a90e2)';
+                    
+                    setTimeout(() => {
+                        this.innerHTML = originalHTML;
+                        this.style.background = originalBackground;
+                    }, 1500);
+                });
+            });
+
+            // Funcionalidad para mostrar/ocultar descripciones
+            document.querySelectorAll('.toggle-description').forEach(button => {
+                button.addEventListener('click', function() {
+                    const description = this.previousElementSibling;
+                    const isCollapsed = description.classList.contains('collapsed');
+                    
+                    if (isCollapsed) {
+                        description.classList.remove('collapsed');
+                        description.classList.add('expanded');
+                        this.textContent = 'Ver menos';
+                    } else {
+                        description.classList.remove('expanded');
+                        description.classList.add('collapsed');
+                        this.textContent = 'Ver más';
+                    }
+                });
+            });
+
+            // Funcionalidad para el botón de donación
+            document.querySelectorAll('.donation-btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const originalHTML = this.innerHTML;
+                    const originalBackground = this.style.background;
+                    
+                    this.innerHTML = '<span class="button-icon">✨</span> ¡Gracias por tu apoyo!';
+                    this.style.background = 'linear-gradient(45deg, #ff8e8e, #ff6b6b)';
+                    
+                    setTimeout(() => {
+                        this.innerHTML = originalHTML;
+                        this.style.background = originalBackground;
+                    }, 1500);
+                });
+            });
+
+            // Funcionalidad para el botón de WhatsApp
+            document.querySelectorAll('.whatsapp-btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const originalHTML = this.innerHTML;
+                    const originalBackground = this.style.background;
+                    
+                    this.innerHTML = '<span class="button-icon">📱</span> Abriendo WhatsApp...';
+                    this.style.background = 'linear-gradient(45deg, #128C7E, #25D366)';
+                    
+                    setTimeout(() => {
+                        this.innerHTML = originalHTML;
+                        this.style.background = originalBackground;
+                    }, 1500);
+                });
+            });
+
+            // Funcionalidad para el buscador
+            const searchToggle = document.getElementById('searchToggle');
+            const searchContainer = document.getElementById('searchContainer');
+            const searchInput = document.getElementById('searchInput');
+            const searchClose = document.getElementById('searchClose');
+
+            // Mostrar/ocultar buscador
+            if (searchToggle) {
+                searchToggle.addEventListener('click', () => {
+                    searchContainer.classList.add('active');
+                    searchInput.focus();
+                });
+            }
+
+            if (searchClose) {
+                searchClose.addEventListener('click', () => {
+                    searchContainer.classList.remove('active');
+                    searchInput.value = '';
+                    filterApps();
+                });
+            }
+
+            // Filtrar aplicaciones al escribir
+            if (searchInput) {
+                searchInput.addEventListener('input', filterApps);
+            }
+
+            function filterApps() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const appCards = document.querySelectorAll('.app-card');
+                let hasResults = false;
+
+                appCards.forEach(card => {
+                    const title = card.querySelector('.app-title').textContent.toLowerCase();
+                    const description = card.querySelector('.app-description').textContent.toLowerCase();
+                    
+                    if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                        card.style.display = 'block';
+                        hasResults = true;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                // Mostrar mensaje si no hay resultados
+                let noResults = document.querySelector('.no-results');
+                const appsGrid = document.getElementById('appsGrid');
+                
+                if (!hasResults && searchTerm) {
+                    if (!noResults) {
+                        noResults = document.createElement('div');
+                        noResults.className = 'no-results';
+                        noResults.textContent = 'No se encontraron aplicaciones que coincidan con tu búsqueda.';
+                        appsGrid.appendChild(noResults);
+                    }
+                    noResults.style.display = 'block';
+                } else if (noResults) {
+                    noResults.style.display = 'none';
                 }
             }
-        });
-        
-        // Manejar cambio de pantalla completa
-        document.addEventListener('fullscreenchange', () => {
-            const fullscreenIcon = fullscreenBtn.querySelector('i');
-            if (document.fullscreenElement) {
-                fullscreenIcon.className = 'fas fa-compress';
-            } else {
-                fullscreenIcon.className = 'fas fa-expand';
-            }
-        });
-        
-        // Manejar clics en el video para pausar/reproducir
-        video.addEventListener('click', () => {
-            if (video.paused || video.ended) {
-                video.play().then(() => {
-                    videoOverlay.classList.remove('visible');
-                    updatePlayPauseButton();
-                });
-            } else {
-                video.pause();
-                updatePlayPauseButton();
-            }
-        });
+
+            // Cerrar buscador con la tecla Escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    if (searchContainer) searchContainer.classList.remove('active');
+                    if (searchInput) {
+                        searchInput.value = '';
+                        filterApps();
+                    }
+                }
+            });
+        }
     </script>
 </body>
 </html>
-
