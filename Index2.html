@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Principal - Nuestra App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            padding: 0;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #0077cc;
+        }
+        
+        h1 {
+            color: #0077cc;
+            margin-bottom: 15px;
+            font-size: 2.5rem;
+        }
+        
+        .tagline {
+            color: #666;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+        
+        .app-description {
+            background-color: #f0f8ff;
+            padding: 30px;
+            border-radius: 8px;
+            margin: 40px 0;
+            box-shadow: 0 3px 10px rgba(0, 119, 204, 0.1);
+        }
+        
+        .app-description h2 {
+            color: #005fa3;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin: 40px 0;
+            gap: 20px;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            width: 30%;
+            min-width: 280px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            border-top: 4px solid #0077cc;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-card h3 {
+            color: #0077cc;
+            margin-bottom: 15px;
+        }
+        
+        .feature-card.free {
+            border-top-color: #28a745;
+        }
+        
+        .feature-card.free h3 {
+            color: #28a745;
+        }
+        
+        .feature-card.premium {
+            border-top-color: #ff6b00;
+        }
+        
+        .feature-card.premium h3 {
+            color: #ff6b00;
+        }
+        
+        .buttons {
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .btn {
+            display: inline-block;
+            margin: 10px 15px;
+            padding: 14px 30px;
+            background-color: #0077cc;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+        
+        .btn:hover {
+            background-color: #005fa3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .feature-card {
+                width: 100%;
+            }
+            
+            .container {
+                margin: 10px;
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Página Principal</h1>
+            <p class="tagline">Bienvenido a nuestro sitio web oficial</p>
+            <p>Explora nuestra plataforma y descubre todas sus funcionalidades</p>
+        </header>
+        
+        <section class="app-description">
+            <h2>Descripción de la App</h2>
+            <p>Nuestra App es una plataforma moderna e intuitiva diseñada para ofrecerte una experiencia completa, flexible y accesible. En ella podrás descargar y utilizar aplicaciones tanto gratuitas como de paga, adaptadas a distintas necesidades y estilos de uso.</p>
+            
+            <p>La versión gratuita te permite explorar funciones esenciales, conocer la plataforma y comenzar a disfrutar de nuestros servicios sin ningún costo. Para quienes buscan una experiencia más avanzada, contamos con opciones de pago que desbloquean herramientas exclusivas, contenido premium, mayor personalización y beneficios adicionales.</p>
+            
+            <p>La App está pensada para ser rápida, segura y fácil de usar, con actualizaciones constantes que garantizan mejoras continuas, mejor rendimiento y nuevas funcionalidades.</p>
+            
+            <p>Ya seas un usuario casual o alguien que busca el máximo potencial, nuestra App te ofrece la libertad de elegir cómo y cuándo acceder a cada función, todo desde un solo lugar.</p>
+        </section>
+        
+        <section class="features">
+            <div class="feature-card">
+                <h3>Plataforma Intuitiva</h3>
+                <p>Interfaz fácil de usar diseñada para todos los niveles de experiencia. Navegación simple y organización clara de funciones.</p>
+            </div>
+            
+            <div class="feature-card free">
+                <h3>Versión Gratuita</h3>
+                <p>Acceso a funciones esenciales sin costo. Perfecta para explorar la plataforma y comenzar a utilizar nuestros servicios básicos.</p>
+            </div>
+            
+            <div class="feature-card premium">
+                <h3>Versión Premium</h3>
+                <p>Contenido exclusivo, herramientas avanzadas, personalización completa y beneficios adicionales para una experiencia superior.</p>
+            </div>
+        </section>
+        
+        <div class="buttons">
+            <a href="Index.html" class="btn">Descargar App</a>
+            <a href="#" class="btn btn-secondary">Más Información</a>
+        </div>
+        
+        <footer>
+            <p>&copy; 2023 Nuestra App. Todos los derechos reservados.</p>
+            <p>Plataforma moderna e intuitiva para todos tus necesidades.</p>
+        </footer>
+    </div>
+</body>
+</html>
