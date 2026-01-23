@@ -3,214 +3,406 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página Principal - Nuestra App</title>
+    <title>Envío de Datos a WhatsApp</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-        
-        body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
+        }
+
+        body {
+            background: linear-gradient(135deg, #000000, #333333);
             color: #333;
-            background-color: #f8f9fa;
-            padding: 0;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .container {
-            padding: 30px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            margin: 20px;
-        }
-        
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #0077cc;
-        }
-        
-        h1 {
-            color: #0077cc;
-            margin-bottom: 15px;
-            font-size: 2.5rem;
-        }
-        
-        .tagline {
-            color: #666;
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-        }
-        
-        .app-description {
-            background-color: #f0f8ff;
-            padding: 30px;
-            border-radius: 8px;
-            margin: 40px 0;
-            box-shadow: 0 3px 10px rgba(0, 119, 204, 0.1);
-        }
-        
-        .app-description h2 {
-            color: #005fa3;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        .features {
+            min-height: 100vh;
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            margin: 40px 0;
-            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
-        
-        .feature-card {
+
+        .container {
+            width: 100%;
+            max-width: 500px;
             background-color: white;
-            border-radius: 8px;
-            padding: 25px;
-            width: 30%;
-            min-width: 280px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            border-top: 4px solid #0077cc;
-            transition: transform 0.3s ease;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
         }
-        
-        .feature-card:hover {
-            transform: translateY(-5px);
+
+        .header-image {
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+            position: relative;
         }
-        
-        .feature-card h3 {
-            color: #0077cc;
-            margin-bottom: 15px;
+
+        .header-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
-        
-        .feature-card.free {
-            border-top-color: #28a745;
-        }
-        
-        .feature-card.free h3 {
-            color: #28a745;
-        }
-        
-        .feature-card.premium {
-            border-top-color: #ff6b00;
-        }
-        
-        .feature-card.premium h3 {
-            color: #ff6b00;
-        }
-        
-        .buttons {
-            text-align: center;
-            margin-top: 40px;
-        }
-        
-        .btn {
-            display: inline-block;
-            margin: 10px 15px;
-            padding: 14px 30px;
-            background-color: #0077cc;
+
+        .header {
+            background-color: #000;
             color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 1.1rem;
-        }
-        
-        .btn:hover {
-            background-color: #005fa3;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .btn-secondary {
-            background-color: #6c757d;
-        }
-        
-        .btn-secondary:hover {
-            background-color: #5a6268;
-        }
-        
-        footer {
+            padding: 20px;
             text-align: center;
-            margin-top: 50px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-            color: #666;
-            font-size: 0.9rem;
+            position: relative;
         }
-        
-        @media (max-width: 768px) {
-            .feature-card {
-                width: 100%;
+
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            color: #ddd;
+        }
+
+        .whatsapp-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2.5rem;
+            color: #25D366;
+        }
+
+        .form-container {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #000;
+            font-size: 1rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #666;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            background-color: #f9f9f9;
+            color: #000;
+        }
+
+        .form-group input:focus {
+            border-color: #25D366;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(37, 211, 102, 0.2);
+            background-color: #fff;
+        }
+
+        .form-group input.error {
+            border-color: #ff3860;
+        }
+
+        .error-message {
+            color: #ff3860;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .required {
+            color: #ff3860;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background-color: #25D366;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: #1da851;
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn i {
+            margin-right: 10px;
+        }
+
+        .info-box {
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 25px;
+            font-size: 0.9rem;
+            border-left: 4px solid #25D366;
+            color: #000;
+        }
+
+        .info-box h3 {
+            margin-bottom: 8px;
+            color: #000;
+        }
+
+        .info-box h3 i {
+            color: #25D366;
+        }
+
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+            text-align: center;
+            border: 1px solid #c3e6cb;
+        }
+
+        .success-message i {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.85rem;
+            border-top: 1px solid #eee;
+            background-color: #f9f9f9;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                max-width: 100%;
             }
             
-            .container {
-                margin: 10px;
+            .form-container {
                 padding: 20px;
             }
             
-            h1 {
-                font-size: 2rem;
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .header-image {
+                height: 150px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Página Principal</h1>
-            <p class="tagline">Bienvenido a nuestro sitio web oficial</p>
-            <p>Explora nuestra plataforma y descubre todas sus funcionalidades</p>
-        </header>
-        
-        <section class="app-description">
-            <h2>Descripción de la App</h2>
-            <p>Nuestra App es una plataforma moderna e intuitiva diseñada para ofrecerte una experiencia completa, flexible y accesible. En ella podrás descargar y utilizar aplicaciones tanto gratuitas como de paga, adaptadas a distintas necesidades y estilos de uso.</p>
-            
-            <p>La versión gratuita te permite explorar funciones esenciales, conocer la plataforma y comenzar a disfrutar de nuestros servicios sin ningún costo. Para quienes buscan una experiencia más avanzada, contamos con opciones de pago que desbloquean herramientas exclusivas, contenido premium, mayor personalización y beneficios adicionales.</p>
-            
-            <p>La App está pensada para ser rápida, segura y fácil de usar, con actualizaciones constantes que garantizan mejoras continuas, mejor rendimiento y nuevas funcionalidades.</p>
-            
-            <p>Ya seas un usuario casual o alguien que busca el máximo potencial, nuestra App te ofrece la libertad de elegir cómo y cuándo acceder a cada función, todo desde un solo lugar.</p>
-        </section>
-        
-        <section class="features">
-            <div class="feature-card">
-                <h3>Plataforma Intuitiva</h3>
-                <p>Interfaz fácil de usar diseñada para todos los niveles de experiencia. Navegación simple y organización clara de funciones.</p>
-            </div>
-            
-            <div class="feature-card free">
-                <h3>Versión Gratuita</h3>
-                <p>Acceso a funciones esenciales sin costo. Perfecta para explorar la plataforma y comenzar a utilizar nuestros servicios básicos.</p>
-            </div>
-            
-            <div class="feature-card premium">
-                <h3>Versión Premium</h3>
-                <p>Contenido exclusivo, herramientas avanzadas, personalización completa y beneficios adicionales para una experiencia superior.</p>
-            </div>
-        </section>
-        
-        <div class="buttons">
-            <a href="index.html" class="btn">Descargar App</a>
-            <a href="#" class="btn btn-secondary">Más Información</a>
+        <div class="header-image">
+            <img src="https://i.postimg.cc/jdSvzH52/Card1-301535076.webp" alt="Porsche en la naturaleza - Arte digital">
         </div>
         
-        <footer>
-            <p>&copy; 2023 Nuestra App. Todos los derechos reservados.</p>
-            <p>Plataforma moderna e intuitiva para todos tus necesidades.</p>
-        </footer>
+        <div class="header">
+            <h1>Envío de Datos a WhatsApp</h1>
+            <p>Complete el formulario para enviar su información</p>
+            <div class="whatsapp-icon">
+                <i class="fab fa-whatsapp"></i>
+            </div>
+        </div>
+        
+        <div class="form-container">
+            <form id="dataForm">
+                <div class="form-group">
+                    <label for="fullName">Nombre Completo <span class="required">*</span></label>
+                    <input type="text" id="fullName" placeholder="Ej: Juan Pérez García" required>
+                    <div class="error-message" id="nameError">Por favor ingrese su nombre completo</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="artistName">Artista <span class="required">*</span></label>
+                    <input type="text" id="artistName" placeholder="Ej: El nombre artístico o nombre de banda" required>
+                    <div class="error-message" id="artistError">Por favor ingrese el nombre del artista</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="rfc">RFC <span class="required">*</span></label>
+                    <input type="text" id="rfc" placeholder="Ej: PEFJ800101ABC" required maxlength="13">
+                    <div class="error-message" id="rfcError">Por favor ingrese un RFC válido (12-13 caracteres)</div>
+                </div>
+                
+                <button type="submit" class="btn">
+                    <i class="fab fa-whatsapp"></i> Enviar a WhatsApp
+                </button>
+                
+                <div class="success-message" id="successMessage">
+                    <i class="fas fa-check-circle"></i>
+                    <p>¡Datos enviados correctamente! Será redirigido a WhatsApp en breve.</p>
+                </div>
+            </form>
+            
+            <div class="info-box">
+                <h3><i class="fas fa-info-circle"></i> Información importante</h3>
+                <p>Los datos serán enviados al número: <strong>524621098798</strong> a través de WhatsApp. Asegúrese de que la información proporcionada sea correcta antes de enviar.</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Esta página solo envía información a través de WhatsApp Web</p>
+        </div>
     </div>
-</body>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('dataForm');
+            const fullNameInput = document.getElementById('fullName');
+            const artistNameInput = document.getElementById('artistName');
+            const rfcInput = document.getElementById('rfc');
+            const successMessage = document.getElementById('successMessage');
+            
+            // Expresión regular para validar RFC (versión simplificada)
+            const rfcRegex = /^[A-Z&Ñ]{3,4}[0-9]{6}[A-Z0-9]{3}$/;
+            
+            // Validación en tiempo real para RFC
+            rfcInput.addEventListener('input', function() {
+                const rfcValue = rfcInput.value.trim().toUpperCase();
+                rfcInput.value = rfcValue;
+                
+                // Validar formato RFC
+                if (rfcValue.length > 0) {
+                    if (!rfcRegex.test(rfcValue)) {
+                        showError(rfcInput, 'rfcError', 'Formato de RFC inválido');
+                    } else {
+                        clearError(rfcInput, 'rfcError');
+                    }
+                } else {
+                    clearError(rfcInput, 'rfcError');
+                }
+            });
+            
+            // Validación en tiempo real para Nombre Completo
+            fullNameInput.addEventListener('blur', function() {
+                if (fullNameInput.value.trim().length < 5) {
+                    showError(fullNameInput, 'nameError', 'El nombre debe tener al menos 5 caracteres');
+                } else {
+                    clearError(fullNameInput, 'nameError');
+                }
+            });
+            
+            // Validación en tiempo real para Artista
+            artistNameInput.addEventListener('blur', function() {
+                if (artistNameInput.value.trim().length < 2) {
+                    showError(artistNameInput, 'artistError', 'El nombre del artista debe tener al menos 2 caracteres');
+                } else {
+                    clearError(artistNameInput, 'artistError');
+                }
+            });
+            
+            // Función para mostrar errores
+            function showError(inputElement, errorId, message) {
+                inputElement.classList.add('error');
+                const errorElement = document.getElementById(errorId);
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+            
+            // Función para limpiar errores
+            function clearError(inputElement, errorId) {
+                inputElement.classList.remove('error');
+                const errorElement = document.getElementById(errorId);
+                errorElement.style.display = 'none';
+            }
+            
+            // Manejo del envío del formulario
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                // Obtener valores
+                const fullName = fullNameInput.value.trim();
+                const artistName = artistNameInput.value.trim();
+                const rfc = rfcInput.value.trim().toUpperCase();
+                
+                let isValid = true;
+                
+                // Validar Nombre Completo
+                if (fullName.length < 5) {
+                    showError(fullNameInput, 'nameError', 'El nombre debe tener al menos 5 caracteres');
+                    isValid = false;
+                } else {
+                    clearError(fullNameInput, 'nameError');
+                }
+                
+                // Validar Artista
+                if (artistName.length < 2) {
+                    showError(artistNameInput, 'artistError', 'El nombre del artista debe tener al menos 2 caracteres');
+                    isValid = false;
+                } else {
+                    clearError(artistNameInput, 'artistError');
+                }
+                
+                // Validar RFC
+                if (rfc.length < 12 || rfc.length > 13) {
+                    showError(rfcInput, 'rfcError', 'El RFC debe tener entre 12 y 13 caracteres');
+                    isValid = false;
+                } else if (!rfcRegex.test(rfc)) {
+                    showError(rfcInput, 'rfcError', 'Formato de RFC inválido');
+                    isValid = false;
+                } else {
+                    clearError(rfcInput, 'rfcError');
+                }
+                
+                // Si todo es válido, enviar a WhatsApp
+                if (isValid) {
+                    // Crear el mensaje para WhatsApp
+                    const message = `*Nuevo Registro Artístico*%0A%0A` +
+                                   `*Nombre Completo:* ${fullName}%0A` +
+                                   `*Artista:* ${artistName}%0A` +
+                                   `*RFC:* ${rfc}%0A%0A` +
+                                   `_Enviado desde el formulario web_`;
+                    
+                    // Número de teléfono (sin espacios ni caracteres especiales)
+                    const phoneNumber = '524621098798';
+                    
+                    // Mostrar mensaje de éxito
+                    successMessage.style.display = 'block';
+                    form.reset();
+                    
+                    // Desplazar hacia arriba para mostrar el mensaje de éxito
+                    successMessage.scrollIntoView({ behavior: 'smooth' });
+                    
+                    // Abrir WhatsApp después de 1.5 segundos
+                    setTimeout(function() {
+                        window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+                    }, 1500);
+                }
+            });
+            
+            // Limpiar mensaje de éxito al empezar a escribir
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    successMessage.style.display = 'none';
+                });
+            });
+        });
+    </script>
+</body>
 </html>
