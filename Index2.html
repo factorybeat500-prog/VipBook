@@ -242,36 +242,6 @@
             display: block;
         }
 
-        .studio-features {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            margin-top: 20px;
-            gap: 10px;
-        }
-
-        .feature {
-            flex: 1;
-            min-width: 120px;
-            text-align: center;
-            padding: 10px;
-            background-color: #f0f8ff;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-        }
-
-        .feature i {
-            color: #25D366;
-            font-size: 1.5rem;
-            margin-bottom: 8px;
-        }
-
-        .feature p {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #333;
-        }
-
         .footer {
             text-align: center;
             padding: 20px;
@@ -311,10 +281,13 @@
             .studio-title h2 {
                 font-size: 1.8rem;
             }
-            
-            .studio-features {
-                flex-direction: column;
-            }
+        }
+        
+        .rfc-note {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
         }
     </style>
 </head>
@@ -331,16 +304,15 @@
         
         <div class="header">
             <h1>Kerim Music</h1>
-            <p>Completa el formulario para reservar o consultar precios</p>
+            <p>Completa el formulario para facturación y contacto</p>
             <div class="whatsapp-icon">
-                </i>
             </div>
         </div>
         
         <div class="form-container">
             <form id="dataForm">
                 <div class="form-group">
-                    <label for="fullName">Nombre Completo <span class="required">*</span></label>
+                    <label for="fullName">Nombre Completo (Facturación) <span class="required">*</span></label>
                     <input type="text" id="fullName" placeholder="Ej: Juan Pérez García" required>
                     <div class="error-message" id="nameError">Por favor ingrese su nombre completo</div>
                 </div>
@@ -352,42 +324,25 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="phone">Teléfono de Contacto <span class="required">*</span></label>
-                    <input type="tel" id="phone" placeholder="Ej: 5551234567" required>
-                    <div class="error-message" id="phoneError">Por favor ingrese un teléfono válido (10 dígitos)</div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="serviceType">Tipo de Servicio <span class="required">*</span></label>
-                    <select id="serviceType" style="width: 100%; padding: 14px; border: 2px solid #666; border-radius: 8px; font-size: 1rem; background-color: #f9f9f9;">
-                        <option value="">Selecciona un servicio</option>
-                        <option value="Grabación de voz">Grabación de voz</option>
-                        <option value="Mezcla y mastering">Mezcla y mastering</option>
-                        <option value="Producción musical">Producción musical</option>
-                        <option value="Grabación en vivo">Grabación en vivo</option>
-                        <option value="Grabación de instrumentos">Grabación de instrumentos</option>
-                        <option value="Otro">Otro servicio</option>
-                    </select>
-                    <div class="error-message" id="serviceError">Por favor seleccione un tipo de servicio</div>
+                    <label for="rfc">RFC (Para facturación) <span class="required">*</span></label>
+                    <input type="text" id="rfc" placeholder="Ej: XAXX010101000" required>
+                    <div class="error-message" id="rfcError">Por favor ingrese un RFC válido (12 o 13 caracteres)</div>
+                    <div class="rfc-note">Formato: Persona física (13 caracteres) o Persona moral (12 caracteres)</div>
                 </div>
                 
                 <button type="submit" class="btn">
-                    <i class="fab fa-whatsapp"></i> Contactar por WhatsApp
+                    <i class="fab fa-whatsapp"></i> Enviar datos para facturación
                 </button>
                 
                 <div class="success-message" id="successMessage">
                     <i class="fas fa-check-circle"></i>
-                    <p>¡Solicitud enviada correctamente! Será redirigido a WhatsApp en breve.</p>
+                    <p>¡Datos enviados correctamente! Será redirigido a WhatsApp en breve.</p>
                 </div>
             </form>
             
-            <div class="studio-features">
-                
-            </div>
-            
             <div class="info-box">
                 <h3><i class="fas fa-info-circle"></i> Información importante</h3>
-                <p>Los datos serán enviados directamente a Kerim Music a través de WhatsApp para agendar una cita o responder tus consultas. Te contactaremos en un plazo máximo de 24 horas.</p>
+                <p>Los datos serán enviados directamente a Kerim Music a través de WhatsApp para proceder con la facturación de nuestros servicios. Te contactaremos en un plazo máximo de 24 horas.</p>
                 <p style="margin-top: 10px;">Teléfono: <span class="phone-number">+52 462 109 8798</span></p>
             </div>
         </div>
@@ -403,28 +358,27 @@
             const form = document.getElementById('dataForm');
             const fullNameInput = document.getElementById('fullName');
             const artistNameInput = document.getElementById('artistName');
-            const phoneInput = document.getElementById('phone');
-            const serviceTypeInput = document.getElementById('serviceType');
+            const rfcInput = document.getElementById('rfc');
             const successMessage = document.getElementById('successMessage');
             
-            // Expresión regular para validar teléfono (10 dígitos)
-            const phoneRegex = /^[0-9]{10}$/;
+            // Expresión regular para validar RFC (12 o 13 caracteres alfanuméricos)
+            const rfcRegex = /^[A-ZÑ&]{3,4}[0-9]{6}[A-Z0-9]{3}$/i;
             
-            // Validación en tiempo real para teléfono
-            phoneInput.addEventListener('input', function() {
-                // Remover caracteres no numéricos
-                let phoneValue = phoneInput.value.replace(/\D/g, '');
-                phoneInput.value = phoneValue;
+            // Validación en tiempo real para RFC
+            rfcInput.addEventListener('input', function() {
+                // Convertir a mayúsculas y eliminar espacios
+                let rfcValue = rfcInput.value.toUpperCase().replace(/\s/g, '');
+                rfcInput.value = rfcValue;
                 
-                // Validar formato de teléfono
-                if (phoneValue.length > 0) {
-                    if (!phoneRegex.test(phoneValue)) {
-                        showError(phoneInput, 'phoneError', 'El teléfono debe tener 10 dígitos');
+                // Validar formato de RFC
+                if (rfcValue.length > 0) {
+                    if (!rfcRegex.test(rfcValue) || (rfcValue.length !== 12 && rfcValue.length !== 13)) {
+                        showError(rfcInput, 'rfcError', 'El RFC debe tener 12 o 13 caracteres alfanuméricos válidos');
                     } else {
-                        clearError(phoneInput, 'phoneError');
+                        clearError(rfcInput, 'rfcError');
                     }
                 } else {
-                    clearError(phoneInput, 'phoneError');
+                    clearError(rfcInput, 'rfcError');
                 }
             });
             
@@ -443,15 +397,6 @@
                     showError(artistNameInput, 'artistError', 'El nombre del artista debe tener al menos 2 caracteres');
                 } else {
                     clearError(artistNameInput, 'artistError');
-                }
-            });
-            
-            // Validación en tiempo real para Tipo de Servicio
-            serviceTypeInput.addEventListener('change', function() {
-                if (serviceTypeInput.value === "") {
-                    showError(serviceTypeInput, 'serviceError', 'Por favor seleccione un tipo de servicio');
-                } else {
-                    clearError(serviceTypeInput, 'serviceError');
                 }
             });
             
@@ -477,8 +422,7 @@
                 // Obtener valores
                 const fullName = fullNameInput.value.trim();
                 const artistName = artistNameInput.value.trim();
-                const phone = phoneInput.value.trim();
-                const serviceType = serviceTypeInput.value;
+                const rfc = rfcInput.value.trim().toUpperCase();
                 
                 let isValid = true;
                 
@@ -498,31 +442,22 @@
                     clearError(artistNameInput, 'artistError');
                 }
                 
-                // Validar Teléfono
-                if (!phoneRegex.test(phone)) {
-                    showError(phoneInput, 'phoneError', 'El teléfono debe tener 10 dígitos');
+                // Validar RFC
+                if (!rfcRegex.test(rfc) || (rfc.length !== 12 && rfc.length !== 13)) {
+                    showError(rfcInput, 'rfcError', 'El RFC debe tener 12 o 13 caracteres alfanuméricos válidos');
                     isValid = false;
                 } else {
-                    clearError(phoneInput, 'phoneError');
-                }
-                
-                // Validar Tipo de Servicio
-                if (serviceType === "") {
-                    showError(serviceTypeInput, 'serviceError', 'Por favor seleccione un tipo de servicio');
-                    isValid = false;
-                } else {
-                    clearError(serviceTypeInput, 'serviceError');
+                    clearError(rfcInput, 'rfcError');
                 }
                 
                 // Si todo es válido, enviar a WhatsApp
                 if (isValid) {
                     // Crear el mensaje para WhatsApp
-                    const message = `*SOLICITUD DE SERVICIO - KERIM MUSIC*%0A%0A` +
-                                   `*Nombre Completo:* ${fullName}%0A` +
+                    const message = `*DATOS PARA FACTURACIÓN - KERIM MUSIC*%0A%0A` +
+                                   `*Nombre Completo (Facturación):* ${fullName}%0A` +
                                    `*Artista/Banda:* ${artistName}%0A` +
-                                   `*Teléfono:* ${phone}%0A` +
-                                   `*Servicio Solicitado:* ${serviceType}%0A%0A` +
-                                   `_Solicitud enviada desde la página web de Kerim Music_`;
+                                   `*RFC:* ${rfc}%0A%0A` +
+                                   `_Datos enviados desde la página web de Kerim Music_`;
                     
                     // Número de teléfono de Kerim Music
                     const phoneNumber = '524621098798';
@@ -542,7 +477,7 @@
             });
             
             // Limpiar mensaje de éxito al empezar a escribir
-            const inputs = document.querySelectorAll('input, select');
+            const inputs = document.querySelectorAll('input');
             inputs.forEach(input => {
                 input.addEventListener('input', function() {
                     successMessage.style.display = 'none';
