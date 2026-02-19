@@ -294,17 +294,17 @@
 <body>
     <div class="container">
         <div class="header-image">
-            <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Estudio de grabación Kerim Music">
+            <img src="https://www.appcreator24.com/srv/imgs/gen/3346530_slider.png?ts=1771482382" alt="Estudio de grabación Kerim Music">
             <div class="image-overlay"></div>
             <div class="studio-title">
-                <h2>KERIM MUSIC</h2>
-                <p>Estudio de Grabación Profesional</p>
+                <h2>KERIM MUSIC+</h2>
+                <p>Manda tus datos</p>
             </div>
         </div>
         
         <div class="header">
-            <h1>Kerim Music</h1>
-            <p>Completa el formulario para facturación y contacto</p>
+            <h1>Kerim Music+</h1>
+            <p>Completa el formulario</p>
             <div class="whatsapp-icon">
             </div>
         </div>
@@ -312,26 +312,20 @@
         <div class="form-container">
             <form id="dataForm">
                 <div class="form-group">
-                    <label for="fullName">Nombre Completo (Facturación) <span class="required">*</span></label>
+                    <label for="fullName">Nombre Completo<span class="required">*</span></label>
                     <input type="text" id="fullName" placeholder="Ej: Juan Pérez García" required>
                     <div class="error-message" id="nameError">Por favor ingrese su nombre completo</div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="artistName">Nombre Artístico / Banda <span class="required">*</span></label>
-                    <input type="text" id="artistName" placeholder="Ej: Tu nombre artístico o banda" required>
-                    <div class="error-message" id="artistError">Por favor ingrese el nombre del artista/banda</div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="rfc">RFC (Para facturación) <span class="required">*</span></label>
+                    <label for="rfc">RFC<span class="required">*</span></label>
                     <input type="text" id="rfc" placeholder="Ej: XAXX010101000" required>
                     <div class="error-message" id="rfcError">Por favor ingrese un RFC válido (12 o 13 caracteres)</div>
                     <div class="rfc-note">Formato: Persona física (13 caracteres) o Persona moral (12 caracteres)</div>
                 </div>
                 
                 <button type="submit" class="btn">
-                    <i class="fab fa-whatsapp"></i> Enviar datos para facturación
+                    <i class="fab fa-whatsapp"></i> Kerim Music+
                 </button>
                 
                 <div class="success-message" id="successMessage">
@@ -342,8 +336,7 @@
             
             <div class="info-box">
                 <h3><i class="fas fa-info-circle"></i> Información importante</h3>
-                <p>Los datos serán enviados directamente a Kerim Music a través de WhatsApp para proceder con la facturación de nuestros servicios. Te contactaremos en un plazo máximo de 24 horas.</p>
-                <p style="margin-top: 10px;">Teléfono: <span class="phone-number">+52 462 109 8798</span></p>
+                <p>Kerim Music+</p>
             </div>
         </div>
         
@@ -357,7 +350,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('dataForm');
             const fullNameInput = document.getElementById('fullName');
-            const artistNameInput = document.getElementById('artistName');
             const rfcInput = document.getElementById('rfc');
             const successMessage = document.getElementById('successMessage');
             
@@ -391,15 +383,6 @@
                 }
             });
             
-            // Validación en tiempo real para Artista
-            artistNameInput.addEventListener('blur', function() {
-                if (artistNameInput.value.trim().length < 2) {
-                    showError(artistNameInput, 'artistError', 'El nombre del artista debe tener al menos 2 caracteres');
-                } else {
-                    clearError(artistNameInput, 'artistError');
-                }
-            });
-            
             // Función para mostrar errores
             function showError(inputElement, errorId, message) {
                 inputElement.classList.add('error');
@@ -421,7 +404,6 @@
                 
                 // Obtener valores
                 const fullName = fullNameInput.value.trim();
-                const artistName = artistNameInput.value.trim();
                 const rfc = rfcInput.value.trim().toUpperCase();
                 
                 let isValid = true;
@@ -432,14 +414,6 @@
                     isValid = false;
                 } else {
                     clearError(fullNameInput, 'nameError');
-                }
-                
-                // Validar Artista
-                if (artistName.length < 2) {
-                    showError(artistNameInput, 'artistError', 'El nombre del artista debe tener al menos 2 caracteres');
-                    isValid = false;
-                } else {
-                    clearError(artistNameInput, 'artistError');
                 }
                 
                 // Validar RFC
@@ -455,7 +429,6 @@
                     // Crear el mensaje para WhatsApp
                     const message = `*DATOS PARA FACTURACIÓN - KERIM MUSIC*%0A%0A` +
                                    `*Nombre Completo (Facturación):* ${fullName}%0A` +
-                                   `*Artista/Banda:* ${artistName}%0A` +
                                    `*RFC:* ${rfc}%0A%0A` +
                                    `_Datos enviados desde la página web de Kerim Music_`;
                     
