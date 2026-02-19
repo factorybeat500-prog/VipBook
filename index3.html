@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instrucciones - Plataforma de Inversión</title>
+    <style>
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            }
+        }
+
+        @keyframes borderGlow {
+            0% {
+                border-color: #ccc;
+            }
+            50% {
+                border-color: #000;
+            }
+            100% {
+                border-color: #ccc;
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a1a;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+            overflow: hidden;
+            padding: 40px;
+            animation: fadeInUp 1s ease-out;
+            border: 1px solid #e0e0e0;
+        }
+        
+        h1 {
+            color: #000;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 700;
+            border-bottom: 3px solid #333;
+            padding-bottom: 15px;
+            letter-spacing: 2px;
+            animation: slideInRight 0.8s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #000, transparent);
+            animation: shimmer 3s infinite;
+        }
+        
+        .instructions-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .instruction-item {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: #f8f8f8;
+            border-radius: 12px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-left: 5px solid #000;
+            border-right: 1px solid #e0e0e0;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+            opacity: 0;
+            animation: slideInRight 0.8s ease-out forwards;
+            animation-delay: calc(0.2s * var(--i));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .instruction-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.05), transparent);
+            transition: left 0.5s;
+        }
+
+        .instruction-item:hover::before {
+            left: 100%;
+        }
+        
+        .instruction-item:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            background: #f0f0f0;
+            border-left-color: #666;
+            animation: pulse 1s ease-in-out;
+        }
+        
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: #000;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-right: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            border: 2px solid #fff;
+        }
+
+        .instruction-item:hover .step-number {
+            background: #333;
+            transform: rotate(360deg);
+            box-shadow: 0 0 0 3px #fff, 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .instruction-text {
+            flex: 1;
+            font-size: 18px;
+            color: #333;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+        
+        .instruction-text strong {
+            color: #000;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+
+        .instruction-text strong::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: #000;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+            transform-origin: right;
+        }
+
+        .instruction-item:hover .instruction-text strong::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        
+        .note {
+            background: #f0f0f0;
+            border-left: 5px solid #333;
+            padding: 15px 20px;
+            margin-top: 25px;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #333;
+            animation: fadeInUp 1s ease-out 1.2s both;
+            transition: all 0.3s ease;
+            border-right: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .note:hover {
+            background: #e8e8e8;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            animation: borderGlow 1.5s infinite;
+        }
+        
+        .note strong {
+            color: #000;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 14px;
+            animation: fadeInUp 1s ease-out 1.4s both;
+            transition: color 0.3s ease;
+        }
+
+        .footer:hover {
+            color: #000;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .instruction-item {
+                padding: 15px;
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .step-number {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .instruction-text {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚫ INSTRUCCIONES ⚪</h1>
+        
+        <ul class="instructions-list">
+            <li class="instruction-item" style="--i:1">
+                <div class="step-number">1</div>
+                <div class="instruction-text">
+                    <strong>REGÍSTRATE</strong> en nuestra plataforma con tus datos completos y verifica tu identidad.
+                </div>
+            </li>
+            
+            <li class="instruction-item" style="--i:2">
+                <div class="step-number">2</div>
+                <div class="instruction-text">
+                    <strong>DEPOSITA TU INVERSIÓN</strong> según el plan que hayas elegido, utilizando los métodos de pago disponibles.
+                </div>
+            </li>
+            
+            <li class="instruction-item" style="--i:3">
+                <div class="step-number">3</div>
+                <div class="instruction-text">
+                    <strong>ENVÍA TU COMPROBANTE</strong> de inversión a través del medio indicado (WhatsApp, correo o formulario web).
+                </div>
+            </li>
+            
+            <li class="instruction-item" style="--i:4">
+                <div class="step-number">4</div>
+                <div class="instruction-text">
+                    <strong>REVISAREMOS TU DEPÓSITO</strong> y validaremos la información en un plazo máximo de 24 horas hábiles.
+                </div>
+            </li>
+            
+            <li class="instruction-item" style="--i:5">
+                <div class="step-number">5</div>
+                <div class="instruction-text">
+                    <strong>CREAREMOS TU PERFIL</strong> y activaremos tu cuenta para que puedas comenzar a generar ganancias.
+                </div>
+            </li>
+        </ul>
+        
+        <div class="note">
+            <strong>📌 NOTA IMPORTANTE:</strong> Una vez completados todos los pasos, recibirás un correo de confirmación con los detalles de acceso a tu cuenta y las instrucciones para comenzar a operar.
+        </div>
+        
+        <div class="footer">
+            ⚡ PROCESO SEGURO - TU INVERSIÓN ESTÁ PROTEGIDA ⚡
+        </div>
+    </div>
+</body>
+</html>
