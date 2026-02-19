@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kerim Music - Estudio de Grabación</title>
+    <title>Kerim Music+ - Estudio de Grabación</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -21,6 +21,87 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Notas musicales flotantes - animación musical */
+        .music-note {
+            position: fixed;
+            color: rgba(255, 255, 255, 0.1);
+            font-size: 2rem;
+            z-index: 0;
+            pointer-events: none;
+            animation: floatNote 8s infinite linear;
+        }
+
+        .music-note:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; font-size: 3rem; }
+        .music-note:nth-child(2) { top: 30%; right: 8%; animation-delay: 2s; font-size: 2.5rem; }
+        .music-note:nth-child(3) { bottom: 20%; left: 10%; animation-delay: 4s; font-size: 2rem; }
+        .music-note:nth-child(4) { top: 70%; right: 15%; animation-delay: 1s; font-size: 3.5rem; }
+        .music-note:nth-child(5) { bottom: 10%; right: 25%; animation-delay: 3s; font-size: 2.2rem; }
+        .music-note:nth-child(6) { top: 15%; right: 30%; animation-delay: 5s; font-size: 2.8rem; }
+        .music-note:nth-child(7) { bottom: 30%; left: 20%; animation-delay: 2.5s; font-size: 2rem; }
+        .music-note:nth-child(8) { top: 50%; left: 15%; animation-delay: 3.5s; font-size: 3rem; }
+
+        @keyframes floatNote {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(1);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.2;
+            }
+            50% {
+                transform: translateY(-100px) rotate(20deg) scale(1.2);
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.1;
+            }
+            100% {
+                transform: translateY(-200px) rotate(40deg) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        /* Ecualizador animado */
+        .equalizer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 5px;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.1;
+        }
+
+        .bar {
+            width: 8px;
+            background: linear-gradient(to top, #25D366, #1da851);
+            border-radius: 10px 10px 0 0;
+            animation: soundWave 1.2s infinite ease-in-out;
+        }
+
+        .bar:nth-child(1) { height: 30px; animation-delay: 0s; }
+        .bar:nth-child(2) { height: 60px; animation-delay: 0.2s; }
+        .bar:nth-child(3) { height: 45px; animation-delay: 0.4s; }
+        .bar:nth-child(4) { height: 80px; animation-delay: 0.1s; }
+        .bar:nth-child(5) { height: 35px; animation-delay: 0.3s; }
+        .bar:nth-child(6) { height: 70px; animation-delay: 0.5s; }
+        .bar:nth-child(7) { height: 50px; animation-delay: 0.15s; }
+        .bar:nth-child(8) { height: 40px; animation-delay: 0.35s; }
+        .bar:nth-child(9) { height: 65px; animation-delay: 0.45s; }
+        .bar:nth-child(10) { height: 55px; animation-delay: 0.25s; }
+
+        @keyframes soundWave {
+            0%, 100% { transform: scaleY(0.5); opacity: 0.3; }
+            50% { transform: scaleY(1.2); opacity: 1; }
         }
 
         .container {
@@ -28,13 +109,40 @@
             max-width: 500px;
             background-color: white;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
             overflow: hidden;
-            transition: transform 0.3s ease;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s;
+            position: relative;
+            z-index: 10;
+            animation: containerAppear 1s ease-out, containerPulse 3s infinite ease-in-out 1s;
+            border: 2px solid rgba(37, 211, 102, 0.3);
+        }
+
+        @keyframes containerAppear {
+            0% {
+                opacity: 0;
+                transform: translateY(50px) scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes containerPulse {
+            0%, 100% {
+                box-shadow: 0 10px 40px rgba(37, 211, 102, 0.3);
+                border-color: rgba(37, 211, 102, 0.3);
+            }
+            50% {
+                box-shadow: 0 15px 50px rgba(37, 211, 102, 0.6);
+                border-color: rgba(37, 211, 102, 0.8);
+            }
         }
 
         .container:hover {
-            transform: translateY(-5px);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(37, 211, 102, 0.5);
         }
 
         .header-image {
@@ -42,6 +150,18 @@
             height: 200px;
             overflow: hidden;
             position: relative;
+            animation: imageReveal 1.2s ease-out;
+        }
+
+        @keyframes imageReveal {
+            0% {
+                opacity: 0;
+                transform: scale(1.1);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .header-image img {
@@ -49,6 +169,13 @@
             height: 100%;
             object-fit: cover;
             display: block;
+            transition: transform 8s linear;
+            animation: slowZoom 20s infinite alternate;
+        }
+
+        @keyframes slowZoom {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.2); }
         }
 
         .image-overlay {
@@ -57,7 +184,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6));
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.7));
         }
 
         .studio-title {
@@ -68,6 +195,12 @@
             text-align: center;
             color: white;
             z-index: 2;
+            animation: titleGlow 2s infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% { text-shadow: 0 0 10px rgba(37, 211, 102, 0.5); }
+            100% { text-shadow: 0 0 30px rgba(37, 211, 102, 1); }
         }
 
         .studio-title h2 {
@@ -75,12 +208,25 @@
             margin-bottom: 5px;
             text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
             letter-spacing: 1px;
+            animation: titleSlide 0.8s ease-out;
+        }
+
+        @keyframes titleSlide {
+            0% {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .studio-title p {
             font-size: 1rem;
             opacity: 0.9;
             font-weight: 300;
+            animation: titleSlide 0.8s ease-out 0.2s both;
         }
 
         .header {
@@ -89,6 +235,18 @@
             padding: 20px;
             text-align: center;
             position: relative;
+            animation: headerAppear 0.8s ease-out 0.3s both;
+        }
+
+        @keyframes headerAppear {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .header h1 {
@@ -109,21 +267,56 @@
             right: 20px;
             font-size: 2.5rem;
             color: #25D366;
-            animation: pulse 2s infinite;
+            animation: pulse 2s infinite, rotate 6s infinite linear;
         }
 
         @keyframes pulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+            50% { transform: scale(1.2) rotate(10deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(10deg); }
+            75% { transform: rotate(-10deg); }
+            100% { transform: rotate(0deg); }
         }
 
         .form-container {
             padding: 30px;
+            animation: formAppear 0.8s ease-out 0.4s both;
+        }
+
+        @keyframes formAppear {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .form-group {
             margin-bottom: 25px;
+            animation: inputSlide 0.5s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.5s; }
+        .form-group:nth-child(2) { animation-delay: 0.6s; }
+
+        @keyframes inputSlide {
+            0% {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .form-group label {
@@ -140,7 +333,7 @@
             border: 2px solid #666;
             border-radius: 8px;
             font-size: 1rem;
-            transition: border-color 0.3s;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             background-color: #f9f9f9;
             color: #000;
         }
@@ -148,12 +341,20 @@
         .form-group input:focus {
             border-color: #25D366;
             outline: none;
-            box-shadow: 0 0 0 2px rgba(37, 211, 102, 0.2);
+            box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.2), 0 0 20px rgba(37, 211, 102, 0.3);
             background-color: #fff;
+            transform: scale(1.02);
         }
 
         .form-group input.error {
             border-color: #ff3860;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
         }
 
         .error-message {
@@ -161,6 +362,7 @@
             font-size: 0.85rem;
             margin-top: 5px;
             display: none;
+            animation: fadeIn 0.3s ease;
         }
 
         .required {
@@ -178,23 +380,63 @@
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             margin-top: 10px;
             box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+            position: relative;
+            overflow: hidden;
+            animation: btnAppear 0.8s ease-out 0.7s both;
+        }
+
+        @keyframes btnAppear {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .btn:hover {
             background: linear-gradient(to right, #1da851, #25D366);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(37, 211, 102, 0.4);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.5);
         }
 
         .btn:active {
-            transform: translateY(0);
+            transform: translateY(0) scale(0.95);
         }
 
         .btn i {
             margin-right: 10px;
+            animation: iconSpin 4s infinite linear;
+        }
+
+        @keyframes iconSpin {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(10deg); }
+            75% { transform: rotate(-10deg); }
+            100% { transform: rotate(0deg); }
         }
 
         .info-box {
@@ -205,6 +447,19 @@
             font-size: 0.9rem;
             border-left: 4px solid #25D366;
             color: #000;
+            animation: infoAppear 0.8s ease-out 0.8s both;
+            transform-origin: left;
+        }
+
+        @keyframes infoAppear {
+            0% {
+                opacity: 0;
+                transform: scaleX(0);
+            }
+            100% {
+                opacity: 1;
+                transform: scaleX(1);
+            }
         }
 
         .info-box h3 {
@@ -217,6 +472,12 @@
         .info-box h3 i {
             color: #25D366;
             margin-right: 10px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
 
         .success-message {
@@ -228,18 +489,37 @@
             display: none;
             text-align: center;
             border: 1px solid #c3e6cb;
-            animation: fadeIn 0.5s ease;
+            animation: successPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        @keyframes successPop {
+            0% {
+                opacity: 0;
+                transform: scale(0.5) rotate(-10deg);
+            }
+            50% {
+                transform: scale(1.1) rotate(5deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
         }
 
         .success-message i {
-            font-size: 1.5rem;
+            font-size: 2rem;
             margin-bottom: 10px;
             display: block;
+            animation: checkSpin 0.6s ease-out;
+        }
+
+        @keyframes checkSpin {
+            0% {
+                transform: rotate(-180deg) scale(0);
+            }
+            100% {
+                transform: rotate(0) scale(1);
+            }
         }
 
         .footer {
@@ -249,6 +529,18 @@
             font-size: 0.85rem;
             border-top: 1px solid #eee;
             background-color: #f9f9f9;
+            animation: footerAppear 0.8s ease-out 0.9s both;
+        }
+
+        @keyframes footerAppear {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .footer p {
@@ -281,6 +573,10 @@
             .studio-title h2 {
                 font-size: 1.8rem;
             }
+            
+            .music-note {
+                font-size: 1.5rem;
+            }
         }
         
         .rfc-note {
@@ -292,20 +588,45 @@
     </style>
 </head>
 <body>
+    <!-- Notas musicales flotantes -->
+    <div class="music-note"><i class="fas fa-music"></i></div>
+    <div class="music-note"><i class="fas fa-headphones-alt"></i></div>
+    <div class="music-note"><i class="fas fa-microphone-alt"></i></div>
+    <div class="music-note"><i class="fas fa-volume-up"></i></div>
+    <div class="music-note"><i class="fas fa-guitar"></i></div>
+    <div class="music-note"><i class="fas fa-drum"></i></div>
+    <div class="music-note"><i class="fas fa-music"></i></div>
+    <div class="music-note"><i class="fas fa-headphones-alt"></i></div>
+
+    <!-- Ecualizador animado -->
+    <div class="equalizer">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+
     <div class="container">
         <div class="header-image">
             <img src="https://www.appcreator24.com/srv/imgs/gen/3346530_slider.png?ts=1771482382" alt="Estudio de grabación Kerim Music">
             <div class="image-overlay"></div>
             <div class="studio-title">
                 <h2>KERIM MUSIC+</h2>
-                <p>Manda tus datos</p>
+                <p>Estudio de Grabación Profesional</p>
             </div>
         </div>
         
         <div class="header">
             <h1>Kerim Music+</h1>
-            <p>Completa el formulario</p>
+            <p>Completa tus datos para facturación</p>
             <div class="whatsapp-icon">
+                <i class="fab fa-whatsapp"></i>
             </div>
         </div>
         
@@ -325,24 +646,26 @@
                 </div>
                 
                 <button type="submit" class="btn">
-                    <i class="fab fa-whatsapp"></i> Kerim Music+
+                    <i class="fab fa-whatsapp"></i> Enviar a Kerim Music+
                 </button>
                 
                 <div class="success-message" id="successMessage">
                     <i class="fas fa-check-circle"></i>
-                    <p>¡Datos enviados correctamente! Será redirigido a WhatsApp en breve.</p>
+                    <p>¡Datos enviados correctamente! Serás redirigido a WhatsApp en breve.</p>
                 </div>
             </form>
             
             <div class="info-box">
                 <h3><i class="fas fa-info-circle"></i> Información importante</h3>
                 <p>Kerim Music+</p>
+
             </div>
         </div>
         
         <div class="footer">
-            <p>Kerim Music - Estudio de Grabación Profesional</p>
-            <p>© 2023 Todos los derechos reservados</p>
+            <p>Kerim Music+ - Estudio de Grabación Profesional</p>
+            <p>© 2024 Todos los derechos reservados</p>
+            <p><i class="fas fa-phone-alt"></i> <span class="phone-number">+52 462 109 8798</span></p>
         </div>
     </div>
 
@@ -389,6 +712,12 @@
                 const errorElement = document.getElementById(errorId);
                 errorElement.textContent = message;
                 errorElement.style.display = 'block';
+                
+                // Vibrar el input (efecto visual)
+                inputElement.style.animation = 'shake 0.5s ease-in-out';
+                setTimeout(() => {
+                    inputElement.style.animation = '';
+                }, 500);
             }
             
             // Función para limpiar errores
@@ -427,25 +756,41 @@
                 // Si todo es válido, enviar a WhatsApp
                 if (isValid) {
                     // Crear el mensaje para WhatsApp
-                    const message = `*DATOS PARA FACTURACIÓN - KERIM MUSIC*%0A%0A` +
-                                   `*Nombre Completo (Facturación):* ${fullName}%0A` +
+                    const message = `*DATOS PARA FACTURACIÓN - KERIM MUSIC+*%0A%0A` +
+                                   `*Nombre Completo:* ${fullName}%0A` +
                                    `*RFC:* ${rfc}%0A%0A` +
-                                   `_Datos enviados desde la página web de Kerim Music_`;
+                                   `_Datos enviados desde la página web de Kerim Music+_`;
                     
                     // Número de teléfono de Kerim Music
                     const phoneNumber = '524621098798';
                     
                     // Mostrar mensaje de éxito
                     successMessage.style.display = 'block';
+                    
+                    // Efecto de confeti simulado con las notas musicales
+                    document.querySelectorAll('.music-note').forEach((note, index) => {
+                        note.style.animation = 'none';
+                        note.offsetHeight;
+                        note.style.animation = `floatNote 8s infinite linear ${index * 0.5}s`;
+                    });
+                    
+                    // Animar el botón
+                    const btn = document.querySelector('.btn');
+                    btn.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        btn.style.transform = '';
+                    }, 200);
+                    
+                    // Resetear formulario
                     form.reset();
                     
                     // Desplazar hacia arriba para mostrar el mensaje de éxito
-                    successMessage.scrollIntoView({ behavior: 'smooth' });
+                    successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     
-                    // Abrir WhatsApp después de 1.5 segundos
+                    // Abrir WhatsApp después de 1.8 segundos
                     setTimeout(function() {
                         window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
-                    }, 1500);
+                    }, 1800);
                 }
             });
             
@@ -455,6 +800,46 @@
                 input.addEventListener('input', function() {
                     successMessage.style.display = 'none';
                 });
+            });
+            
+            // Efecto de bienvenida: animar el título
+            const title = document.querySelector('.studio-title h2');
+            if (title) {
+                title.style.animation = 'titleGlow 2s infinite alternate, titleSlide 0.8s ease-out';
+            }
+            
+            // Crear efecto de onda al hacer click en el botón
+            const btn = document.querySelector('.btn');
+            btn.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
+                ripple.style.width = '100px';
+                ripple.style.height = '100px';
+                ripple.style.left = e.clientX - e.target.offsetLeft - 50 + 'px';
+                ripple.style.top = e.clientY - e.target.offsetTop - 50 + 'px';
+                ripple.style.transform = 'scale(0)';
+                ripple.style.animation = 'ripple 0.6s linear';
+                ripple.style.pointerEvents = 'none';
+                
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes ripple {
+                        to {
+                            transform: scale(4);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                e.target.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                    style.remove();
+                }, 600);
             });
         });
     </script>
