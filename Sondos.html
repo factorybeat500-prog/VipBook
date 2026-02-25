@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+  <title>🔊 Sonidos · Pausa circular 🎶</title>
+  <style>
+    /* reset y base fluida */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Comic Sans MS', 'Chalkboard SE', 'Segoe UI', cursive, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(145deg, #fdeff2 0%, #fef9e7 100%);
+      min-height: 100vh;
+      padding: 1rem 0.8rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .wrapper {
+      max-width: 1300px;
+      width: 100%;
+    }
+
+    /* título principal chunky */
+    .main-title {
+      text-align: center;
+      font-size: clamp(2rem, 8vw, 4rem);
+      background: #ffdbb5;
+      display: inline-block;
+      padding: 0.4rem 1.5rem;
+      border-radius: 60px;
+      box-shadow: 0 6px 0 #e3a56d, 0 10px 18px rgba(0,0,0,0.1);
+      margin: 0 auto 1.5rem auto;
+      color: #4b2e1b;
+      border: 3px solid #fff6e6;
+      width: fit-content;
+    }
+
+    /* botones de sección (naturales / artificiales) */
+    .controles-seccion {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-seccion {
+      font-size: clamp(1.2rem, 5vw, 2rem);
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 6px 0 #b59d86, 0 6px 12px rgba(0,0,0,0.2);
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
+      border: 4px solid white;
+      flex: 0 1 auto;
+    }
+
+    .btn-seccion:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #b59d86, 0 6px 12px rgba(0,0,0,0.2);
+    }
+
+    .btn-naturales {
+      background: #d8f0d4;
+      color: #2f6b2f;
+      border-color: #9ecf8b;
+    }
+
+    .btn-artificiales {
+      background: #ffe2c9;
+      color: #b5541b;
+      border-color: #ffb085;
+    }
+
+    .btn-activo {
+      transform: scale(1.03);
+      box-shadow: 0 4px 0 #b59d86, 0 8px 16px rgba(0,0,0,0.3);
+      border-width: 6px;
+    }
+
+    /* secciones ocultas/visibles */
+    .seccion {
+      border-radius: 40px 40px 25px 25px;
+      padding: 1.5rem 1rem 2rem 1rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 12px 0 rgba(0, 0, 0, 0.05), 0 15px 25px rgba(0, 0, 0, 0.1);
+      transition: opacity 0.25s ease;
+      width: 100%;
+    }
+
+    .seccion-oculta {
+      display: none;
+    }
+
+    .naturales {
+      background-color: #d8f0d4;
+      border: 6px solid #9ecf8b;
+    }
+
+    .artificiales {
+      background-color: #ffe2c9;
+      border: 6px solid #ffb085;
+    }
+
+    .titulo-seccion {
+      font-size: clamp(2rem, 7vw, 3rem);
+      margin-top: -0.8rem;
+      margin-bottom: 1.2rem;
+      padding-left: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      filter: drop-shadow(3px 3px 0 #ffffffb0);
+    }
+
+    .titulo-seccion span {
+      background: white;
+      border-radius: 70px;
+      padding: 0.3rem 1.2rem;
+      font-size: clamp(1.3rem, 5vw, 2rem);
+      border: 4px solid currentColor;
+      white-space: nowrap;
+    }
+
+    .naturales .titulo-seccion span {
+      color: #2f6b2f;
+      border-color: #5ca35c;
+    }
+
+    .artificiales .titulo-seccion span {
+      color: #b5541b;
+      border-color: #e1864b;
+    }
+
+    /* GALERÍA: cuadrícula responsiva */
+    .grid-sonidos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 1.2rem;
+      justify-content: center;
+      align-items: stretch;
+    }
+
+    /* --- TARJETAS CON ICONO CIRCULAR (fino) --- */
+    .tarjeta {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(3px);
+      border-radius: 40px;
+      padding: 0.8rem 0.3rem 0.6rem 0.3rem;
+      box-shadow: 0 7px 0 #c9b6a2, 0 8px 18px rgba(0, 0, 0, 0.12);
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border: 4px solid white;
+      text-align: center;
+    }
+
+    .tarjeta-reproduciendo {
+      transform: scale(1.03);
+      box-shadow: 0 7px 0 #4CAF50, 0 8px 18px rgba(76, 175, 80, 0.4);
+      border-color: #4CAF50;
+    }
+
+    .tarjeta:active {
+      transform: scale(1.05);
+      box-shadow: 0 3px 0 #b59d86, 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    /* ICONO CIRCULAR PERFECTO */
+    .icono {
+      font-size: 3.8rem;
+      line-height: 1.3;
+      background: #ffffff;
+      width: 5.5rem;
+      height: 5.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 5px 0 #d4c2aa, 0 6px 12px rgba(0, 0, 0, 0.1);
+      border: 3px solid #ffe3b5;
+      margin-bottom: 0.4rem;
+      transition: all 0.15s ease;
+      text-shadow: 1px 2px 0 #fdebba;
+    }
+
+    .tarjeta-reproduciendo .icono {
+      border-color: #4CAF50;
+      box-shadow: 0 5px 0 #2e7d32, 0 6px 14px #4caf6f80;
+      background: #f6fff0;
+    }
+
+    .nombre {
+      font-size: clamp(1rem, 4vw, 1.4rem);
+      font-weight: bold;
+      background: #fffaf0;
+      padding: 0.2rem 0.5rem;
+      border-radius: 40px;
+      border: 2px solid #ead3b0;
+      color: #3f280e;
+      width: 95%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+    }
+
+    /* +++ BOTÓN FLOTANTE: SOLO UN CÍRCULO PARA PAUSAR/REANUDAR +++ */
+    .boton-flotante-puro {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      width: 75px;
+      height: 75px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 6px solid #ffb085;
+      box-shadow: 0 8px 0 #b59d86, 0 10px 20px rgba(0, 0, 0, 0.25);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1200;
+      transition: all 0.12s ease;
+      font-size: 3.2rem;
+      user-select: none;
+    }
+
+    .boton-flotante-puro:active {
+      transform: translateY(6px);
+      box-shadow: 0 2px 0 #b59d86, 0 10px 18px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Modal styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .modal-content {
+      background: #fff9e6;
+      border-radius: 50px;
+      padding: 2rem;
+      max-width: 400px;
+      width: 90%;
+      border: 8px solid #ffb085;
+      box-shadow: 0 15px 0 #b59d86, 0 20px 30px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+
+    .modal-content h2 {
+      font-size: clamp(1.5rem, 6vw, 2.5rem);
+      color: #b5541b;
+      margin-bottom: 1rem;
+    }
+
+    .modal-content p {
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      color: #4b2e1b;
+    }
+
+    .modal-content input {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.3rem;
+      border: 4px solid #ffb085;
+      border-radius: 40px;
+      margin-bottom: 1rem;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .modal-btn {
+      padding: 0.8rem 1.5rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 40px;
+      cursor: pointer;
+      font-weight: bold;
+      border: 4px solid white;
+      transition: transform 0.08s ease;
+    }
+
+    .modal-btn:active {
+      transform: translateY(4px);
+    }
+
+    .btn-comprar {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .btn-verificar {
+      background: #ffb085;
+      color: #4b2e1b;
+    }
+
+    .btn-cerrar {
+      background: #f44336;
+      color: white;
+    }
+
+    .dias-restantes {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      background: #ffdbb5;
+      padding: 0.5rem 1rem;
+      border-radius: 30px;
+      border: 3px solid white;
+      font-weight: bold;
+      z-index: 1000;
+    }
+
+    .instruccion {
+      text-align: center;
+      font-size: 1.5rem;
+      margin: 1.5rem 0;
+      color: #4b2e1b;
+      background: #fff9e6;
+      padding: 0.8rem;
+      border-radius: 50px;
+      border: 3px solid #ffdbb5;
+    }
+
+    .bloqueado {
+      filter: grayscale(0.7);
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    @media (max-width: 500px) {
+      .boton-flotante-puro {
+        width: 70px;
+        height: 70px;
+        bottom: 20px;
+        right: 20px;
+        font-size: 3rem;
+        border-width: 5px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .grid-sonidos {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper" id="mainContent">
+  <h1 class="main-title">🎈 MIS SONIDOS FAVORITOS 🎈</h1>
+
+  <div class="controles-seccion">
+    <button class="btn-seccion btn-naturales btn-activo" id="btnNaturales">🌿 NATURALES 🌿</button>
+    <button class="btn-seccion btn-artificiales" id="btnArtificiales">🚗 ARTIFICIALES 🚗</button>
+  </div>
+
+  <section class="seccion naturales" id="seccionNaturales">
+    <div class="titulo-seccion">
+      <span>🌿 NATURALES 🌿</span>
+    </div>
+    <div class="grid-sonidos" id="gridNaturales"></div>
+  </section>
+
+  <section class="seccion artificiales seccion-oculta" id="seccionArtificiales">
+    <div class="titulo-seccion">
+      <span>🚗 ARTIFICIALES 🚗</span>
+    </div>
+    <div class="grid-sonidos" id="gridArtificiales"></div>
+  </section>
+
+  <div class="instruccion" id="instruccion">
+    👆 ¡Toca cualquier tarjeta para escuchar! 👆
+  </div>
+</div>
+
+<div class="boton-flotante-puro" id="botonPausa" title="Pausar / Reanudar">⏸️</div>
+
+<script>
+  (function() {
+    // ========== SISTEMA DE LICENCIA ==========
+    const LICENCIA_VALIDA = "MAMM99";
+    const COSTO = "$100 MXN";
+    const WHATSAPP = "524621098798";
+    const STORAGE_KEY = 'sonidos_licencia';
+    const FECHA_INICIO_KEY = 'sonidos_fecha_inicio';
+
+    // Verificar estado de licencia
+    function verificarLicencia() {
+      const licenciaData = localStorage.getItem(STORAGE_KEY);
+      
+      if (licenciaData) {
+        try {
+          const data = JSON.parse(licenciaData);
+          if (data.licencia === LICENCIA_VALIDA && data.activa === true) {
+            return { activa: true, licencia: LICENCIA_VALIDA };
+          }
+        } catch (e) {
+          console.error('Error parsing licencia');
+        }
+      }
+      
+      return { activa: false };
+    }
+
+    // Verificar período de prueba
+    function verificarPeriodoPrueba() {
+      const fechaInicio = localStorage.getItem(FECHA_INICIO_KEY);
+      let inicio;
+      
+      if (!fechaInicio) {
+        inicio = new Date();
+        localStorage.setItem(FECHA_INICIO_KEY, inicio.toISOString());
+      } else {
+        inicio = new Date(fechaInicio);
+      }
+      
+      const hoy = new Date();
+      const diffTime = hoy - inicio;
+      const diffDias = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      
+      return {
+        diasPasados: diffDias,
+        diasRestantes: Math.max(0, 30 - diffDias),
+        enPrueba: diffDias < 30
+      };
+    }
+
+    // Mostrar días restantes
+    function mostrarDiasRestantes() {
+      if (document.getElementById('diasRestantes')) return;
+      
+      const prueba = verificarPeriodoPrueba();
+      const licencia = verificarLicencia();
+      
+      if (licencia.activa) return;
+      
+      const diasDiv = document.createElement('div');
+      diasDiv.className = 'dias-restantes';
+      diasDiv.id = 'diasRestantes';
+      diasDiv.textContent = `⏳ Prueba: ${prueba.diasRestantes} días`;
+      document.body.appendChild(diasDiv);
+    }
+
+    // Actualizar días restantes
+    function actualizarDiasRestantes() {
+      const diasDiv = document.getElementById('diasRestantes');
+      if (!diasDiv) return;
+      
+      const prueba = verificarPeriodoPrueba();
+      diasDiv.textContent = `⏳ Prueba: ${prueba.diasRestantes} días`;
+    }
+
+    // Mostrar modal de compra
+    function mostrarModalCompra() {
+      // Evitar múltiples modales
+      if (document.querySelector('.modal-overlay')) return;
+      
+      const overlay = document.createElement('div');
+      overlay.className = 'modal-overlay';
+      overlay.innerHTML = `
+        <div class="modal-content">
+          <h2>🎵 Licencia de por vida 🎵</h2>
+          <p>Tu período de prueba de 30 días ha terminado.</p>
+          <p>Adquiere tu licencia por solo ${COSTO}</p>
+          <div class="modal-buttons">
+            <button class="modal-btn btn-comprar" id="btnComprar">💳 Comprar ahora</button>
+            <button class="modal-btn btn-cerrar" id="btnCerrarModal">✖️ Cerrar</button>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(overlay);
+      
+      document.getElementById('btnComprar').addEventListener('click', () => {
+        window.open(`https://wa.me/${WHATSAPP}?text=Hola%2C%20quiero%20comprar%20la%20licencia%20de%20por%20vida%20de%20Sonidos%20por%20${encodeURIComponent(COSTO)}`, '_blank');
+        overlay.remove();
+      });
+      
+      document.getElementById('btnCerrarModal').addEventListener('click', () => {
+        overlay.remove();
+      });
+    }
+
+    // Mostrar modal de licencia
+    function mostrarModalLicencia() {
+      // Evitar múltiples modales
+      if (document.querySelector('.modal-overlay')) return;
+      
+      const overlay = document.createElement('div');
+      overlay.className = 'modal-overlay';
+      overlay.innerHTML = `
+        <div class="modal-content">
+          <h2>🔑 Ingresa tu código de licencia</h2>
+          <p>Si ya compraste tu licencia, ingresa el código:</p>
+          <input type="text" id="codigoLicencia" placeholder="Ej: MAMM99" maxlength="10" style="text-transform:uppercase">
+          <div class="modal-buttons">
+            <button class="modal-btn btn-verificar" id="btnVerificar">✅ Verificar</button>
+            <button class="modal-btn btn-comprar" id="btnComprarDesdeLicencia">💳 Comprar</button>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(overlay);
+      
+      document.getElementById('btnVerificar').addEventListener('click', () => {
+        const codigo = document.getElementById('codigoLicencia').value.trim().toUpperCase();
+        
+        if (codigo === LICENCIA_VALIDA) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify({
+            licencia: LICENCIA_VALIDA,
+            activa: true,
+            fecha: new Date().toISOString()
+          }));
+          overlay.remove();
+          location.reload(); // Recargar para aplicar cambios
+        } else {
+          alert('❌ Código incorrecto. Verifícalo de nuevo.');
+        }
+      });
+      
+      document.getElementById('btnComprarDesdeLicencia').addEventListener('click', () => {
+        window.open(`https://wa.me/${WHATSAPP}?text=Hola%2C%20quiero%20comprar%20la%20licencia%20de%20por%20vida%20de%20Sonidos%20por%20${encodeURIComponent(COSTO)}`, '_blank');
+      });
+    }
+
+    // Bloquear/desbloquear interacción
+    function setInteraccionBloqueada(bloquear) {
+      const tarjetas = document.querySelectorAll('.tarjeta');
+      const instruccion = document.getElementById('instruccion');
+      
+      tarjetas.forEach(t => {
+        if (bloquear) {
+          t.style.pointerEvents = 'none';
+          t.style.opacity = '0.5';
+          t.style.filter = 'grayscale(0.7)';
+        } else {
+          t.style.pointerEvents = 'auto';
+          t.style.opacity = '1';
+          t.style.filter = 'none';
+        }
+      });
+      
+      if (instruccion) {
+        if (bloquear) {
+          instruccion.innerHTML = '⏰ Período de prueba terminado. Adquiere tu licencia para seguir disfrutando. ⏰';
+        } else {
+          instruccion.innerHTML = '👆 ¡Toca cualquier tarjeta para escuchar! 👆';
+        }
+      }
+    }
+
+    // ========== VARIABLES DE AUDIO ==========
+    let audioActual = null;
+    let tarjetaActual = null;
+    let reproduciendo = false;
+
+    const botonFlotante = document.getElementById('botonPausa');
+    
+    const seccionNaturales = document.getElementById('seccionNaturales');
+    const seccionArtificiales = document.getElementById('seccionArtificiales');
+    const btnNaturales = document.getElementById('btnNaturales');
+    const btnArtificiales = document.getElementById('btnArtificiales');
+
+    // ========== BASE DE DATOS SONIDOS ==========
+    const naturales = [
+      { emoji: '🐄', nombre: 'Vaca', audio: 'https://www.dropbox.com/scl/fi/71sbf60p0cb99m36hn29w/Sonido-de-vaca.mp3?rlkey=btg8m16hqq1p6ui8k7ycllmey&st=ybyno45b&raw=1' },
+      { emoji: '🐱', nombre: 'Gato', audio: 'https://www.dropbox.com/scl/fi/cgkivlh50m7pysxs4ktdn/Sonido-de-Gato.mp3?rlkey=x5b7e4450a7vx2p9pnj9bth8n&st=s7op2nc4&raw=1' },
+      { emoji: '🌧️', nombre: 'Lluvia', audio: 'https://www.dropbox.com/scl/fi/dkb7k8a20o8zv3bk8fzd7/Sonido-de-Lluvia.mp3?rlkey=vwdqcprtzf4mwh6apvt24k9gq&st=r9zp80ev&raw=1' },
+      { emoji: '🌊', nombre: 'Olas', audio: 'https://www.dropbox.com/scl/fi/j6g1xswzafruaeguxvu21/Sonido-de-Olas-de-mar.mp3?rlkey=3ydyajnt3g1tiamqj8gp64rl8&st=r2dxgb69&raw=1' },
+      { emoji: '🐦', nombre: 'Pájaro', audio: 'https://www.dropbox.com/scl/fi/53lr5g5y7enou58kd4zq6/Sonido-de-pajaro.mp3?rlkey=0g64pfdcpi2envgjuy64r5dba&st=dj116ck8&raw=1' },
+      { emoji: '🐶', nombre: 'Perro', audio: 'https://www.dropbox.com/scl/fi/sp105rkur4wlt2at1hpcp/Sonido-de-Perro.mp3?rlkey=9fqb8ov9vnhyirudq1uchld01&st=sn4nqlri&raw=1' },
+      { emoji: '🌬️', nombre: 'Viento', audio: 'https://www.dropbox.com/scl/fi/cn3zylxovhaht4s07hzfk/Sonido-de-Viento.mp3?rlkey=wmxul3nkoezvxfwuemkgyt7wb&st=y3exbob8&raw=1' },
+      { emoji: '🐓', nombre: 'Gallo', audio: 'https://www.dropbox.com/scl/fi/tja9xw5pzrk3o0ywfgeg2/Sonido-grillo.mp3?rlkey=w5qbtohcvgmxu5izacq43938a&st=7filolcg&raw=1' },
+      { emoji: '🏞️', nombre: 'Rio', audio: 'https://www.dropbox.com/scl/fi/2mig575xlwdiw5vsmwlhc/Sonidos-de-Agua-de-rio.mp3?rlkey=mke3v7geco0z7irr6hjafze88&st=n1wp31ik&raw=1' },
+      { emoji: '⚡', nombre: 'Trueno', audio: 'https://www.dropbox.com/scl/fi/yexwhfraibu8aygx4p7iw/Sonidos-de-Trueno.mp3?rlkey=k8a1rqb6pv3lub3u6mtqlt4be&st=wn34v5d2&raw=1' }
+    ];
+
+    const artificiales = [
+      { emoji: '🎹', nombre: 'Piano', audio: 'https://www.dropbox.com/scl/fi/3kb4b3s98mgb7oyu46p2r/Sonido-piano.mp3?rlkey=xjggah1lsq4h769b6nq4icvqr&st=2tkrx5jc&raw=1' },
+      { emoji: '✈️', nombre: 'Avión', audio: 'https://www.dropbox.com/scl/fi/2xapm17f13iuawp29qlpp/Sonido-de-Avi-n.mp3?rlkey=27coyfip63q2g2rjf5tthx668&st=3p5u2krt&raw=1' },
+      { emoji: '🚗', nombre: 'Carro', audio: 'https://www.dropbox.com/scl/fi/3zk8xvzgys6k1ucy52xsi/Sonido-de-Carro.mp3?rlkey=91z9ocpka44wphdk92o2bsi5m&st=54cthvsx&raw=1' },
+      { emoji: '🔔', nombre: 'Campana', audio: 'https://www.dropbox.com/scl/fi/ueh92ss4wmh2kqyd97u0t/Sonido-de-Cmpana.mp3?rlkey=jhmb6c514b7m462f47vmhtcad&st=jpy9ntuy&raw=1' },
+      { emoji: '📞', nombre: 'Llamada', audio: 'https://www.dropbox.com/scl/fi/6c1gtz75d2od0qw7yttfd/Sonido-de-Llamada.mp3?rlkey=r8rfrlfmptvkvmrj2f912iq1r&st=wc1yk4uh&raw=1' },
+      { emoji: '🚓', nombre: 'Policía', audio: 'https://www.dropbox.com/scl/fi/tq3pwt2gxtmo91q7mfypq/Sonido-de-Policia.mp3?rlkey=rxc113l14wgbbo09c5pru91yw&st=xwx9yxpp&raw=1' },
+      { emoji: '🥁', nombre: 'Tambor', audio: 'https://www.dropbox.com/scl/fi/c444z69gttxfk40gmuj0b/Sonido-de-Tambor.mp3?rlkey=o8y6m9s204s01vhvmd4z2t80n&st=demf7jto&raw=1' },
+      { emoji: '🚪', nombre: 'Puerta', audio: 'https://www.dropbox.com/scl/fi/264k9dc7d1t9nat2ox473/Sonido-de-tocar-puerta.mp3?rlkey=t4nmf2mzuyw9kbzodsu4i8l6l&st=9ofxnd14&raw=1' },
+      { emoji: '📺', nombre: 'TV', audio: 'https://www.dropbox.com/scl/fi/d2m9chxgzcyaa872ja97o/Sonido-de-Tv.mp3?rlkey=ajjvivrg4md2ukaudoer4ukov&st=rrjqfmm8&raw=1' },
+      { emoji: '✂️', nombre: 'Tijera', audio: 'https://www.dropbox.com/scl/fi/dan4kzij2lzouj5s3u3vd/Sonidos-de-Tijeras.mp3?rlkey=6z4qwfnc6kwo711rlugrxjnoc&st=3y2lbind&raw=1' }
+    ];
+
+    // ========== FUNCIONES DE CONTROL ==========
+    function mostrarBoton(estadoReproduciendo) {
+      botonFlotante.style.display = 'flex';
+      botonFlotante.textContent = estadoReproduciendo ? '⏸️' : '▶️';
+    }
+
+    function ocultarBoton() {
+      botonFlotante.style.display = 'none';
+    }
+
+    function limpiarTarjetaAnterior() {
+      if (tarjetaActual) {
+        tarjetaActual.classList.remove('tarjeta-reproduciendo');
+      }
+    }
+
+    function detenerAudioActual() {
+      if (audioActual) {
+        audioActual.pause();
+        audioActual.currentTime = 0;
+        audioActual = null;
+      }
+      limpiarTarjetaAnterior();
+      tarjetaActual = null;
+      reproduciendo = false;
+      ocultarBoton();
+    }
+
+    function pausarOReanudar() {
+      if (!audioActual) {
+        ocultarBoton();
+        return;
+      }
+
+      if (reproduciendo) {
+        audioActual.pause();
+        reproduciendo = false;
+        mostrarBoton(false);
+      } else {
+        audioActual.play().catch(err => console.warn('Reanudar error:', err));
+        reproduciendo = true;
+        mostrarBoton(true);
+      }
+    }
+
+    // ========== EVENTOS ==========
+    botonFlotante.addEventListener('click', (e) => {
+      e.stopPropagation();
+      pausarOReanudar();
+    });
+
+    function mostrarSeccion(tipo) {
+      if (tipo === 'naturales') {
+        seccionNaturales.classList.remove('seccion-oculta');
+        seccionArtificiales.classList.add('seccion-oculta');
+        btnNaturales.classList.add('btn-activo');
+        btnArtificiales.classList.remove('btn-activo');
+      } else {
+        seccionNaturales.classList.add('seccion-oculta');
+        seccionArtificiales.classList.remove('seccion-oculta');
+        btnNaturales.classList.remove('btn-activo');
+        btnArtificiales.classList.add('btn-activo');
+      }
+    }
+
+    btnNaturales.addEventListener('click', () => mostrarSeccion('naturales'));
+    btnArtificiales.addEventListener('click', () => mostrarSeccion('artificiales'));
+
+    // ========== CREAR TARJETAS ==========
+    function crearTarjeta(item) {
+      const tarjeta = document.createElement('div');
+      tarjeta.className = 'tarjeta';
+      tarjeta.setAttribute('aria-label', `Escuchar ${item.nombre}`);
+
+      tarjeta.innerHTML = `
+        <div class="icono" role="img" aria-label="ícono de ${item.nombre}">${item.emoji}</div>
+        <div class="nombre">${item.nombre}</div>
+      `;
+
+      tarjeta.addEventListener('click', (e) => {
+        e.stopPropagation();
+
+        // Verificar acceso antes de reproducir
+        const licencia = verificarLicencia();
+        const prueba = verificarPeriodoPrueba();
+        
+        if (!licencia.activa && !prueba.enPrueba) {
+          mostrarModalCompra();
+          return;
+        }
+
+        detenerAudioActual();
+
+        const audio = new Audio(item.audio);
+        audio.volume = 0.8;
+
+        audioActual = audio;
+        tarjetaActual = tarjeta;
+        tarjeta.classList.add('tarjeta-reproduciendo');
+
+        reproduciendo = true;
+        mostrarBoton(true);
+
+        audio.addEventListener('ended', () => {
+          detenerAudioActual();
+        });
+
+        audio.play().catch(err => {
+          console.warn('Error reproduciendo:', item.audio, err);
+          alert(`🔇 No se pudo reproducir "${item.nombre}". ¡Usa tu imaginación!`);
+          detenerAudioActual();
+        });
+
+        tarjeta.style.transform = 'scale(1.05)';
+        setTimeout(() => { tarjeta.style.transform = ''; }, 130);
+      });
+
+      return tarjeta;
+    }
+
+    // ========== INICIALIZACIÓN ==========
+    function inicializar() {
+      // Poblar grids
+      const gridNaturales = document.getElementById('gridNaturales');
+      naturales.forEach(item => gridNaturales.appendChild(crearTarjeta(item)));
+
+      const gridArtificiales = document.getElementById('gridArtificiales');
+      artificiales.forEach(item => gridArtificiales.appendChild(crearTarjeta(item)));
+
+      ocultarBoton();
+      
+      // Verificar acceso
+      const licencia = verificarLicencia();
+      const prueba = verificarPeriodoPrueba();
+      
+      if (!licencia.activa && !prueba.enPrueba) {
+        // Período de prueba terminado - bloquear todo
+        setInteraccionBloqueada(true);
+        
+        // Mostrar modal de compra una sola vez
+        if (!sessionStorage.getItem('modal_compra_mostrado')) {
+          sessionStorage.setItem('modal_compra_mostrado', 'true');
+          mostrarModalCompra();
+        }
+      } else if (!licencia.activa) {
+        // En período de prueba - mostrar contador
+        mostrarDiasRestantes();
+        setInteraccionBloqueada(false);
+        
+        // Actualizar contador cada minuto
+        setInterval(() => {
+          actualizarDiasRestantes();
+          // Verificar si ya terminó la prueba
+          const pruebaActual = verificarPeriodoPrueba();
+          if (!pruebaActual.enPrueba) {
+            location.reload(); // Recargar para aplicar bloqueo
+          }
+        }, 60000);
+      } else {
+        // Licencia activa - acceso completo
+        setInteraccionBloqueada(false);
+      }
+    }
+
+    // Inicializar todo
+    inicializar();
+  })();
+</script>
+
+</body>
+</html>
